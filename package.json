@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve"
+    "start": "node main.js",
+    "debug": "node --nolazy --inspect-brk=9229 main.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
