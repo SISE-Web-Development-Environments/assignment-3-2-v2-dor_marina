@@ -13,11 +13,6 @@
       }"
       disabled
     ></RecipePreviewList>
-    <!-- <div
-      style="position: absolute;top: 70%;left: 50%;transform: translate(-50%, -50%);"
-    >
-      Centeredasdasdad
-    </div>-->
   </div>
 </template>
 

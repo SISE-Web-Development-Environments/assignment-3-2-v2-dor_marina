@@ -9,6 +9,7 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
 });
+axios.defaults.withCredentials = true;
 
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
@@ -24,6 +25,7 @@ import {
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  DropdownPlugin
 } from "bootstrap-vue";
 [
   FormGroupPlugin,
@@ -36,9 +38,12 @@ import {
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  DropdownPlugin
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 
+import VueCookies from 'vue-cookies';
+Vue.use(VueCookies)
 axios.interceptors.request.use(
   function(config) {
     // Do something before request is sent
