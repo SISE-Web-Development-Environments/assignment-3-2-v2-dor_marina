@@ -7,9 +7,6 @@
       <b-row v-for="r in recipes" :key="r.id">
         <RecipePreview class="recipePreview" :recipe="r" />
       </b-row>
-      <b-row>
-        <b-button style="margin-left:120px;" @click="updateRecipes">See More</b-button>
-      </b-row>
     </b-col>
   </b-container>
 </template>
@@ -17,7 +14,7 @@
 <script>
 import RecipePreview from "./RecipePreview.vue";
 export default {
-  name: "RecipePreviewList",
+  name: "RecipeWatchedList",
   components: {
     RecipePreview
   },
@@ -39,7 +36,7 @@ export default {
     async updateRecipes() {
       try {
         const response = await this.axios.get(
-          "https://recipes-from-gramma.herokuapp.com/recipe/3Random",
+          "https://recipes-from-gramma.herokuapp.com/profile/last3watched",
         );
         const recipes = response.data.info_recipes;
         this.recipes = [];

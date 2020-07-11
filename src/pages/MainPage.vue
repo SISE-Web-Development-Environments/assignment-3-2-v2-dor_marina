@@ -1,10 +1,21 @@
 <template>
   <div class="container">
-    <h1 class="title">Main Page</h1>
-    <RecipePreviewList title="Randome Recipes" class="RandomRecipes center" />
-    <router-link v-if="!$root.store.username" to="/login" tag="button">You need to Login to vue this</router-link>
-    {{ !$root.store.username }}
-    <RecipePreviewList
+    <b-container class="bv-example-row">
+      <b-row>
+        <b-col>
+          <RecipePreviewList title="Explore this recipes" class="RandomRecipes center" />
+        </b-col>
+        <b-col>
+          <span v-if="!$root.store.username">
+            <login id="login"/>
+          </span>
+          <span v-else>
+            <RecipeWatched title="Last watched recipes"/>
+          </span>
+        </b-col>
+      </b-row>
+    </b-container>
+    <!-- <RecipePreviewList
       title="Last Viewed Recipes"
       :class="{
         RandomRecipes: true,
@@ -12,15 +23,19 @@
         center: true
       }"
       disabled
-    ></RecipePreviewList>
+    ></RecipePreviewList> -->
   </div>
 </template>
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList";
+import login from '../components/Login';
+import RecipeWatched from "../components/RecipeWatchedList";
 export default {
   components: {
-    RecipePreviewList
+    RecipePreviewList,
+    login,
+    RecipeWatched
   }
 };
 </script>
@@ -37,4 +52,13 @@ export default {
   pointer-events: none;
   cursor: default;
 }
+b-container{
+  height: 100%;
+  width: 100%;
+}
+
+#login{
+  margin-top: 15%;
+}
+
 </style>

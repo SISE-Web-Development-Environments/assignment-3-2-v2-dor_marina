@@ -55,9 +55,9 @@ export default {
 
       try {
         response = await this.axios.get(
-          "https://test-for-3-2.herokuapp.com/recipes/info",
+          "https://recipes-from-gramma.herokuapp.com/recipe/Infomation",
           {
-            params: { id: this.$route.params.recipeId }
+            params: { recipeId: this.$route.params.recipeId }
           }
         );
 
@@ -101,7 +101,7 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };
 </script>
 
