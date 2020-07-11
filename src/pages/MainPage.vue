@@ -10,7 +10,7 @@
             <login id="login"/>
           </span>
           <span v-else>
-            <RecipeWatched title="Last watched recipes"/>
+            <RecipeWatched title="Last watched recipes" style="margin-top:3px"/>
           </span>
         </b-col>
       </b-row>
@@ -41,9 +41,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.RandomRecipes {
-  margin: 10px 0 10px;
-}
 .blur {
   -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
   filter: blur(2px);

@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  min-height: 250px;
+  min-height: 300px;
 }
 .title{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

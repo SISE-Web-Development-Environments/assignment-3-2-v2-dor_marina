@@ -38,9 +38,18 @@ export default {
         const response = await this.axios.get(
           "https://recipes-from-gramma.herokuapp.com/profile/last3watched",
         );
-        const recipes = response.data.info_recipes;
+        const ids = response.data;
+        var length = ids.length;
+        let recipesFromAns=[];
         this.recipes = [];
-        this.recipes.push(...recipes);
+        for(let i=0; i<length; i++){
+            let resp;
+            resp = await this.axios.get(
+            `https://recipes-from-gramma.herokuapp.com/recipe/Information/${ids[i]['recipe_watched']}`,
+            );
+            recipesFromAns.push(resp.data.data);
+        }
+        this.recipes.push(...recipesFromAns);
       } catch (error) {
         console.log(error);
       }
@@ -51,7 +60,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  min-height: 250px;
+  min-height: 300px;
 }
 .title{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

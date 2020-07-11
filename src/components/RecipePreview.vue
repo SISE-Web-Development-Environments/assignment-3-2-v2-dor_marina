@@ -5,7 +5,7 @@
           <router-link
       :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
       class="recipe-preview">
-          <img :src="recipe.image" class="recipe-image" @click="addToWatched"/>
+          <img :src="recipe.image" class="recipe-image"/>
           </router-link>
         </b-col>
         <b-col class="recipe-footer">
