@@ -1,14 +1,16 @@
 <template>
   <b-container>
-    <h3>
+    <h3 class="title">
       {{ title }}:
-      <slot></slot>
     </h3>
-    <b-row>
-      <b-col v-for="r in recipes" :key="r.id">
+    <b-col>
+      <b-row v-for="r in recipes" :key="r.id">
         <RecipePreview class="recipePreview" :recipe="r" />
-      </b-col>
-    </b-row>
+      </b-row>
+      <b-row>
+        <b-button style="margin-left:120px;" @click="updateRecipes">See More</b-button>
+      </b-row>
+    </b-col>
   </b-container>
 </template>
 
@@ -37,14 +39,11 @@ export default {
     async updateRecipes() {
       try {
         const response = await this.axios.get(
-          "https://test-for-3-2.herokuapp.com/recipes/random"
+          "https://recipes-from-gramma.herokuapp.com/recipe/3Random",
         );
-
-        // console.log(response);
-        const recipes = response.data.recipes;
+        const recipes = response.data.info_recipes;
         this.recipes = [];
         this.recipes.push(...recipes);
-        // console.log(this.recipes);
       } catch (error) {
         console.log(error);
       }
@@ -55,6 +54,17 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  min-height: 400px;
+  min-height: 300px;
+}
+.title{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-style: italic;
+  max-width: 600px;
+  padding-top: 5%;
+  align-content: center;
+  text-shadow: 2px 2px 0px rgba(95, 95, 95, 0.377);
+  margin-bottom:20px ;
+  text-align: center;
+  font-weight:600;
 }
 </style>
