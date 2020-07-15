@@ -1,13 +1,6 @@
 <template>
     <b-container>
       <b-row>
-        <b-col class="recipe-body">
-          <router-link
-      :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-      class="recipe-preview">
-          <img :src="recipe.image" class="recipe-image"/>
-          </router-link>
-        </b-col>
         <b-col class="recipe-footer">
            <div :title="recipe.title" class="recipe-title">
             {{ recipe.title }}
@@ -21,6 +14,13 @@
             <li v-if="$root.store.username">watched: {{recipe.watched}}</li>
             <li v-if="$root.store.username">saved: {{recipe.favorite}}</li>
           </div>
+        </b-col>
+        <b-col class="recipe-body">
+          <router-link
+      :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
+      class="recipe-preview">
+          <img :src="recipe.image" class="recipe-image"/>
+          </router-link>
         </b-col>
       </b-row>
     </b-container>

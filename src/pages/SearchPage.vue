@@ -81,17 +81,26 @@
         </b-form-group>
       </div>
     </b-form>
+    <div style="overflow:auto;">
+      <b-row v-for="r in recipes" :key="r.id">
+          <RecipePreview class="recipePreview" :recipe="r" />
+      </b-row>
+    </div>
   </div>
 </template>
 
 
 <script>
+  import RecipePreview from "C:/Users/dordo/עבודות_אוניברסיטה/סביבות פיתוח באינטרנט/3-3/assignment-3-2-v2-dor_marina/src/components/RecipePreview.vue";
   import cuisines from "../assets/cuisine.js"
   import diets from "../assets/diet.js"
   import Intolerances from "../assets/Intolerance.js"
   import { required } from "vuelidate/lib/validators";
   export default {
     name: "Login",
+    components: {
+    RecipePreview
+   },
     data() {
     return {
     form: {
@@ -105,7 +114,8 @@
     resultsNumOptions: ["5","10","15"],
     cuisines: [{ value: null, text: "", disabled: true }],
     diets: [{ value: null, text: "", disabled: true }],
-    Intolerances: [{ value: null, text: "", disabled: true }]
+    Intolerances: [{ value: null, text: "", disabled: true }],
+    recipes:[]
     };
   },
   mounted() {
@@ -132,21 +142,23 @@
     async Search() {
       try{
         let parameters={};
-        parameters.searchQuery=this.Keyword;
-        if(this.resultsNum!=null){
-          parameters.numOfRecipes=this.resultsNum;
+        if(this.form.resultsNum!=null){
+          parameters.numOfRecipes=this.form.resultsNum;
         }
-        if(this.cuisine!=null){
-          parameters.cuisine=this.cuisine;
+        if(this.form.cuisine!=null){
+          parameters.cuisine=this.form.cuisine;
         }
-        if(this.Intolerance!=null){
-          parameters.intolerances=this.Intolerance;
+        if(this.form.Intolerance!=null){
+          parameters.intolerances=this.form.Intolerance;
         }
-        if(this.diet!=null){
-          parameters.diet=this.diet;
+        if(this.form.diet!=null){
+          parameters.diet=this.form.diet;
         }
-        const response = await this.axios.get("https://recipes-from-gramma.herokuapp.com/recipe/search/query");
-        
+        const response = await this.axios.get("https://recipes-from-gramma.herokuapp.com/recipe/search/query/"+this.form.Keyword,{
+         params: parameters
+        });
+        this.recipes=[];
+        this.recipes.push(...response.data.info_recipes);
       }catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
@@ -170,7 +182,6 @@
 .container {
   font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-style: italic;
-  height: 700px;
   padding-top: 5%;
   align-content: center;
 }
