@@ -12,7 +12,7 @@
             <li>gluten free: {{recipe.glutenFree}}</li>
             <li>vegan: {{recipe.vegan}}</li>
             <li v-if="$root.store.username">watched: {{recipe.watched}}</li>
-            <li v-if="$root.store.username">saved: {{recipe.favorite}}</li>
+            <li v-if="$root.store.username">favorites: {{recipe.favorite}}</li>
           </div>
         </b-col>
         <b-col class="recipe-body">

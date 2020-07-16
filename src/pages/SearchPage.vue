@@ -23,7 +23,7 @@
         <b-button
           type="search"
           variant="primary"
-          style="width:70px;height:35px"
+          style="width:70px;height:35px;margin-left:445px;"
           class="button"
           >Search</b-button>
       </div>
@@ -81,10 +81,40 @@
         </b-form-group>
       </div>
     </b-form>
-    <div style="overflow:auto;">
-      <b-row v-for="r in recipes" :key="r.id">
+    <div id="notfound" v-if="form.submitError">
+      No recipes found
+    </div>
+    <div v-else-if="searched">
+      <div div class="flex">
+        Sort by:
+        <b-button
+          id="likeSortButton"
+          type="sort"
+          style="width:70px;height:35px;margin-left:30px"
+          @click="likeSort"
+          >Likes&#x25B4;</b-button>
+          <b-button
+          id="timeSortButton"
+          type="sort"
+          style="width:70px;height:35px;margin-left:30px;"
+          @click="timeSort"
+          >Time&#x25B4;</b-button>
+      </div>
+      <div v-if="orederByTime">
+        <b-row v-for="r in orderedTime" :key="r.id">
           <RecipePreview class="recipePreview" :recipe="r" />
-      </b-row>
+        </b-row>
+      </div>
+      <div v-else-if="orederByLikes">
+        <b-row v-for="r in orderedLikes" :key="r.id">
+          <RecipePreview class="recipePreview" :recipe="r" />
+        </b-row>
+      </div>
+      <div v-else>
+        <b-row v-for="r in recipes" :key="r.id">
+            <RecipePreview class="recipePreview" :recipe="r" />
+        </b-row>
+      </div>
     </div>
   </div>
 </template>
@@ -97,7 +127,7 @@
   import Intolerances from "../assets/Intolerance.js"
   import { required } from "vuelidate/lib/validators";
   export default {
-    name: "Login",
+    name: "search",
     components: {
     RecipePreview
    },
@@ -115,13 +145,40 @@
     cuisines: [{ value: null, text: "", disabled: true }],
     diets: [{ value: null, text: "", disabled: true }],
     Intolerances: [{ value: null, text: "", disabled: true }],
-    recipes:[]
+    recipes:[],
+    searched:false,
+    orederByTime:false,
+    orederByLikes:false,
+    IncDec:false
     };
+  },
+  computed:{
+    orderedTime: function(){
+      if(this.IncDec){
+        return _.orderBy(this.recipes,'readyInMinutes','asc');
+      }
+      else{
+        return _.orderBy(this.recipes,'readyInMinutes','desc');
+      }
+    },
+    orderedLikes: function(){
+      if(this.IncDec){
+        return _.orderBy(this.recipes,'like','asc');
+      }
+      else{
+        return _.orderBy(this.recipes,'like','desc');
+      }
+    }
   },
   mounted() {
     this.cuisines.push(...cuisines);
     this.diets.push(...diets);
     this.Intolerances.push(...Intolerances);
+    if(this.$root.store.username && this.$root.store.lastSearch){
+      this.recipes=[];
+      this.recipes.push(...this.$root.store.lastSearch);
+      this.searched=true;
+    }
   },
   validations: {
     form: {
@@ -135,6 +192,48 @@
     }
   },
   methods: {
+    timeSort(){
+      if(this.orederByTime){
+        if(this.IncDec){
+          this.IncDec=false;
+          document.getElementById("timeSortButton").innerText='Time▴';
+          return;
+        }
+        else
+          this.IncDec=true;
+          document.getElementById("timeSortButton").innerText='Time▾';
+          return;
+      }
+      else{
+        this.IncDec=false;
+        this.orederByTime=true;
+        if(this.orederByLikes){
+          this.orederByLikes=false;
+          document.getElementById("likeSortButton").innerText='Likes▴';
+        }
+      }
+    },
+    likeSort(){
+      if(this.orederByLikes){
+        if(this.IncDec){
+          this.IncDec=false;
+          document.getElementById("likeSortButton").innerText='Likes▴';
+          return;
+        }
+        else
+          this.IncDec=true;
+          document.getElementById("likeSortButton").innerText='Likes▾';
+          return;
+      }
+      else{
+        this.IncDec=false;
+        this.orederByLikes=true;
+        if(this.orederByTime){
+          this.orederByTime=false;
+          document.getElementById("timeSortButton").innerText='Time▴';
+        }
+      }
+    },
     validateState(param) {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
@@ -159,6 +258,10 @@
         });
         this.recipes=[];
         this.recipes.push(...response.data.info_recipes);
+        if(this.$root.store.username){
+          this.$root.store.saveSearch(this.recipes);
+        }
+        this.searched=true;
       }catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
@@ -176,6 +279,9 @@
   }
 </script>
 <style lang="scss" scoped>
+#notfound{
+  font-size:0.6cm;
+}
 .flex {
     display: flex;
 }
@@ -209,7 +315,7 @@
   border: none;
   font-size: 17px;
   margin-top:2px;
-  margin-left:445px;
+  margin-left:10px;
 }
 
 .button:hover{

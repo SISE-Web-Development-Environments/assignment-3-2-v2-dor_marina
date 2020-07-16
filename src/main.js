@@ -2,9 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
-
 import routes from "./routes";
 import VueRouter from "vue-router";
+window._ = require('lodash');
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -73,6 +73,11 @@ Vue.config.productionTip = false;
 
 const shared_data = {
   username: localStorage.username,
+  lastSearch:localStorage.lastSearch,
+  saveSearch(search){
+    localStorage.setItem("lastSearch", search);
+    this.lastSearch = search;
+  },
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
@@ -81,7 +86,9 @@ const shared_data = {
   logout() {
     console.log("logout");
     localStorage.removeItem("username");
+    localStorage.removeItem("lastSearch");
     this.username = undefined;
+    this.lastSearch = undefined;
   },
 };
 console.log(shared_data);
