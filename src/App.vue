@@ -12,18 +12,17 @@
           <router-link :to="{ name: 'login' }" tag="a" class="a">Login</router-link>
         </span>
         <span v-else>
+          <a class="a" style="color:white; font-weight: 300; font-size:20px; margin-top:8px;"> In meal:{{$root.store.number}} recipes</a>
           <b-dropdown id="dropdown-1"  class="m-md-2">
             <template v-slot:button-content>
                 {{$root.store.username}}
             </template>
-            <b-dropdown-item :to="{ name: 'favorites' }">Favorites</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'favorites' }">Saved &#128151;</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'personal' }" >Personal</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'family' }">Family</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'createNew' }">Create Recipe</b-dropdown-item>
-            <!-- <div class="dropdown-divider"></div> -->
-            <b-dropdown-item @click="Logout">Logout</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'meal' } ">My Meal</b-dropdown-item>
           </b-dropdown>
-          <!-- <button @click="Logout">Logout</button> -->
+          <b-button @click="Logout">Logout &#128275;</b-button>
         </span>
       </span>
     </nav>
@@ -34,6 +33,9 @@
 <script>
 export default {
   name: "App",
+  mounted(){
+    this.recipesInMeal();
+  },
   methods: {
     Logout() {
       this.$root.store.logout();
@@ -43,7 +45,20 @@ export default {
         this.$forceUpdate();
       });
     },
-  },
+    async recipesInMeal(){
+      if(this.$root.store.username){
+       try {
+          const response = await this.axios.get(
+            "http://localhost:3000/profile/getNumberInMeal",
+          );
+          this.$root.store.setNum(response.data);
+          console.log(this.$root.store.number)
+       } catch (error) {
+        console.log(error);
+      }
+      }
+    },
+  }
 };
 </script>
 

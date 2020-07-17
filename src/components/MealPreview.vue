@@ -9,7 +9,7 @@
           <div class="hover01 column">
             <div>
               <figure><img :src="recipe.image" class="recipe-image" /> </figure>
-              <span>Click to see more</span>
+              <span>Click to make the recipe🔥</span>
             </div>
           </div>
           </router-link>
@@ -21,13 +21,10 @@
           <div class="recipe-overview">
             <li v-if="recipe.readyInMinutes">{{ recipe.readyInMinutes }} minutes</li>
             <li v-if="recipe.durationTime">{{ recipe.durationTime }} minutes</li>
-            <li v-if="recipe.like">{{ recipe.like }} likes</li>
             <li>vegeterian: {{ recipe.vegetarian}}</li>
             <li>gluten free: {{recipe.glutenFree}}</li>
             <li>vegan: {{recipe.vegan}}</li>
-            <li v-if="$root.store.username && recipe.watched " >watched: {{recipe.watched}}</li>
-            <li v-if="$root.store.username && recipe.favorite ">saved: {{recipe.favorite}}</li>
-            <b-button pill variant="outline-danger" v-if="$root.store.username && !recipe.favorite" @click="addToFavorites">save &#128151;</b-button>
+            <b-button pill variant="secondary" @click="removeFromMeal">Remove From Meal</b-button>
           </div>
         </b-col>
       </b-row>
@@ -43,28 +40,25 @@ export default {
     }
   },
   methods:{
-    async addToFavorites(){
-      try {
-        const response = await this.axios.post(
-          "http://localhost:3000/recipe/addToFavorites",
-          {
-            recipe_id: this.recipe.id,
-          },
-          {withCredentials: true}
-        );
-      } catch (err) {
-        console.log(err.response);
-        this.form.submitError = err.response.data.message;
+      async removeFromMeal(){
+        try {
+            response = await this.axios.delete(
+            `http://localhost:3000/profile/deleteRecipeFromMeal/${this.recipe.id}`);
+            console.log("deleted?")
+            this.$root.$emit("mealRemoved");
+      } catch (error) {
+        console.log("error.response.status", error.response.status);
+        return;
       }
-    }
-  },
+      }
+  }
 };
 </script>
 
 <style scoped>
 
 img{
-  height: 200px;
+  height: 250px;
   width: auto;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -100,14 +94,15 @@ img{
 }
 .column div span {
 	position: absolute;
-	/* bottom: -20px; */
+	/* bottom: 20px; */
 	left: 0;
 	/* z-index: -0.5; */
 	display: block;
 	width: 300px;
 	margin: 0;
 	padding: 0;
-	color: #444;
+    color: rgb(48, 48, 48);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 	font-size: 18px;
 	text-decoration: none;
 	text-align: center;
@@ -116,14 +111,16 @@ img{
 	opacity: 0;
 }
 figure {
-	width: 300px;
-	height: 200px;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
+  height: 250px;
+  width: auto;
+    /* overflow: hidden; */
+    border-radius: 8px;
+  margin-bottom: 5px;
 }
 figure:hover + span {
 	/* bottom: -36px; */
-	opacity: 1;
+    opacity: 1;
+    background-color: #db7953;
+    margin-left: 60px;
 }
 </style>

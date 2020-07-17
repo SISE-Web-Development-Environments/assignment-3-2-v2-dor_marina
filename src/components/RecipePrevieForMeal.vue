@@ -5,7 +5,6 @@
           <router-link
       :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
       class="recipe-preview">
-          <!-- <img :src="recipe.image" class="recipe-image"/> -->
           <div class="hover01 column">
             <div>
               <figure><img :src="recipe.image" class="recipe-image" /> </figure>
@@ -58,6 +57,20 @@ export default {
       }
     }
   },
+  async addToMeal(){
+      try {
+        const response = await this.axios.post(
+          "http://localhost:3000/profile/addToMeal",
+          {
+            recipe_id: this.recipe.id,
+          },
+          {withCredentials: true}
+        );
+      } catch (err) {
+        console.log(err.response);
+        this.form.submitError = err.response.data.message;
+      }
+    },
 };
 </script>
 
@@ -111,7 +124,7 @@ img{
 	font-size: 18px;
 	text-decoration: none;
 	text-align: center;
-	-webkit-transition: .3s ease-in-out;
+	/* -webkit-transition: .3s ease-in-out; */
 	/* transition: .3s ease-in-out; */
 	opacity: 0;
 }
@@ -123,7 +136,6 @@ figure {
 	overflow: hidden;
 }
 figure:hover + span {
-	/* bottom: -36px; */
 	opacity: 1;
 }
 </style>
