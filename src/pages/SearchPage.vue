@@ -137,7 +137,7 @@
 
 <script>
   import Multiselect from 'vue-multiselect'
-  import RecipePreview from "C:/Users/dordo/עבודות_אוניברסיטה/סביבות פיתוח באינטרנט/3-3/assignment-3-2-v2-dor_marina/src/components/RecipePreview.vue";
+  import RecipePreview from "../components/RecipePreview";
   import cuisines from "../assets/cuisine.js"
   import diets from "../assets/diet.js"
   import Intolerances from "../assets/Intolerance.js"

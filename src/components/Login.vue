@@ -101,10 +101,21 @@ export default {
           {withCredentials: true}
         );
         this.$root.store.login(this.form.username);
+        this.recipesInMeal();
         this.$router.push("/");
       } catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
+      }
+    },
+    async recipesInMeal(){
+       try {
+          const response = await this.axios.get(
+            "http://localhost:3000/profile/getNumberInMeal",
+          );
+          this.$root.store.setNum(response.data);
+       } catch (error) {
+        console.log(error);
       }
     },
     onLogin() {

@@ -28,9 +28,34 @@ const routes = [
     component: () => import("./pages/RecipeViewPage"),
   },
   {
+    path: "/personalRecipe/:recipeId",
+    name: "personalRecipe",
+    component: () => import("./pages/PersonalViewPage.vue"),
+  },
+  {
     path: "/about",
     name: "about",
     component: () => import("./pages/AboutPage.vue"),
+  },
+  {
+    path:"/favorites",
+    name: "favorites",
+    component: () => import("./pages/FavoritePage.vue"),
+  },
+  {
+    path:"/personal",
+    name: "personal",
+    component: () => import("./pages/PersonalPage.vue"),
+  },
+  {
+    path:"/family",
+    name: "family",
+    component: () => import("./pages/FamilyPage.vue"),
+  },
+  {
+    path:"/meal",
+    name: "meal",
+    component: () => import("./pages/PlanMealPage.vue"),
   },
   {
     path: "*",

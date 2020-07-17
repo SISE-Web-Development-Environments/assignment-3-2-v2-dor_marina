@@ -3,6 +3,9 @@
     <h3 class="title">
       {{ title }}:
     </h3>
+    <b-row v-if="error">
+                <h3 style="text-align: center; font-style: oblique; margin-top:15px; margin-left: 22%;">{{error}}</h3>
+            </b-row>
     <b-col>
       <b-row v-for="r in recipes" :key="r.id">
         <RecipePreview class="recipePreview" :recipe="r" />
@@ -26,7 +29,8 @@ export default {
   },
   data() {
     return {
-      recipes: []
+      recipes: [],
+      error:null
     };
   },
   mounted() {
@@ -36,8 +40,9 @@ export default {
     async updateRecipes() {
       try {
         const response = await this.axios.get(
-          "https://recipes-from-gramma.herokuapp.com/profile/last3watched",
+          "http://localhost:3000/profile/last3watched",
         );
+        this.error=null;
         const ids = response.data;
         var length = ids.length;
         let recipesFromAns=[];
@@ -45,13 +50,21 @@ export default {
         for(let i=0; i<length; i++){
             let resp;
             resp = await this.axios.get(
-            `https://recipes-from-gramma.herokuapp.com/recipe/Information/${ids[i]['recipe_watched']}`,
+            `http://localhost:3000/recipe/Information/${ids[i]['recipe_watched']}`,
             );
             recipesFromAns.push(resp.data.data);
         }
         this.recipes.push(...recipesFromAns);
       } catch (error) {
-        console.log(error);
+        if(error.response.data.message === 'unauthorized'){
+      //     this.$root.store.logout();
+      //     this.$router.push("/login").catch(() => {
+      //       this.$forceUpdate();
+      // });
+        }
+        else{
+          this.error = "Sorry, you didn't watched any recipes yet"
+        }
       }
     }
   }

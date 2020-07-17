@@ -1,6 +1,18 @@
 <template>
     <b-container>
       <b-row>
+        <b-col class="recipe-body">
+          <router-link
+      :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
+      class="recipe-preview">
+          <div class="hover01 column">
+            <div>
+              <figure><img :src="recipe.image" class="recipe-image" /> </figure>
+              <span>Click to see more</span>
+            </div>
+          </div>
+          </router-link>
+        </b-col>
         <b-col class="recipe-footer">
            <div :title="recipe.title" class="recipe-title">
             {{ recipe.title }}
@@ -16,19 +28,6 @@
             <li v-if="$root.store.username && recipe.favorite ">saved: {{recipe.favorite}}</li>
             <b-button pill variant="outline-danger" v-if="$root.store.username && !recipe.favorite" @click="addToFavorites">save &#128151;</b-button>
           </div>
-        </b-col>
-        <b-col class="recipe-body">
-          <router-link
-      :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-      class="recipe-preview">
-          <!-- <img :src="recipe.image" class="recipe-image"/> -->
-          <div class="hover01 column">
-            <div>
-              <figure><img :src="recipe.image" class="recipe-image" /> </figure>
-              <span>Click to see more</span>
-            </div>
-          </div>
-          </router-link>
         </b-col>
       </b-row>
     </b-container>
@@ -58,19 +57,34 @@ export default {
       }
     }
   },
+  async addToMeal(){
+      try {
+        const response = await this.axios.post(
+          "http://localhost:3000/profile/addToMeal",
+          {
+            recipe_id: this.recipe.id,
+          },
+          {withCredentials: true}
+        );
+      } catch (err) {
+        console.log(err.response);
+        this.form.submitError = err.response.data.message;
+      }
+    },
 };
 </script>
 
 <style scoped>
 
 img{
-  height: 150px;
+  height: 200px;
   width: auto;
   border-radius: 8px;
   margin-bottom: 30px;
 }
 .recipe-footer{
   display:inline-block;
+  margin-left:150px;
 }
 
 .recipe-title{
@@ -95,36 +109,33 @@ img{
 	margin-left: 1em;
 	color: #333;
   font-size: 100%;
-  margin-right: 50px;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 .column div span {
 	position: absolute;
 	/* bottom: -20px; */
-	/* left: 0; */
-  /* z-index: -0.5; */
+	left: 0;
+	/* z-index: -0.5; */
 	display: block;
 	width: 300px;
-	/* margin: 0; */
-  /* padding: 0; */
-  padding-right: 30px;
+	margin: 0;
+	padding: 0;
 	color: #444;
 	font-size: 18px;
 	text-decoration: none;
-  text-align: center;
-	-webkit-transition: .3s ease-in-out;
+	text-align: center;
+	/* -webkit-transition: .3s ease-in-out; */
 	/* transition: .3s ease-in-out; */
 	opacity: 0;
 }
 figure {
-	width: auto;
-	height: 150px;
+	width: 300px;
+	height: 200px;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 }
 figure:hover + span {
-	/* bottom: -36px; */
 	opacity: 1;
 }
 </style>

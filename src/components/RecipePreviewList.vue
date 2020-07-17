@@ -8,7 +8,7 @@
         <RecipePreview class="recipePreview" :recipe="r" />
       </b-row>
       <b-row>
-        <b-button style="margin-left:120px;" @click="updateRecipes">See More</b-button>
+        <b-button style="margin-left:120px; margin-bottom:10px;" @click="updateRecipes">See More</b-button>
       </b-row>
     </b-col>
   </b-container>
@@ -39,7 +39,7 @@ export default {
     async updateRecipes() {
       try {
         const response = await this.axios.get(
-          "https://recipes-from-gramma.herokuapp.com/recipe/3Random",
+          "http://localhost:3000/recipe/3Random",
         );
         const recipes = response.data.info_recipes;
         this.recipes = [];
@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  min-height: 300px;
+  min-height: 320px;
 }
 .title{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

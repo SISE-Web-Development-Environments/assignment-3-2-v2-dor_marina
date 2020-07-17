@@ -2,18 +2,25 @@
   <div class="container">
     <div v-if="recipe">
       <div class="recipe-header mt-3 mb-4">
-        <h1>{{ recipe.title }}</h1>
-        <h3>{{recipe.servings}}</h3>
-        <img :src="recipe.image" class="center" />
+        <h1 style="text-align: center; font-style: oblique; margin-bottom:15px;">{{ recipe.title }}</h1>
+        <img :src="recipe.image" class="center" style="filter: contrast(150%); border-radius: 8px;"/>
+         <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username && !recipe.inMeal" @click="addToMeal" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
+         <div v-if="message">{{message}}</div>
       </div>
       <div class="recipe-body">
         <div class="wrapper">
           <div class="wrapped">
             <div class="mb-3">
-              <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.likes }} likes</div>
+              <div><b>Ready in</b> {{ recipe.readyInMinutes }} minutes</div>
+              <div><b>Likes:</b> {{ recipe.likes }} likes</div>
+              <div><b>Servings:</b> {{recipe.servings}}</div>
+              <div><b>Vegeterian:</b> {{ recipe.vegetarian}}</div>
+              <div><b>Gluten free:</b> {{recipe.glutenFree}}</div>
+              <div><b>Vegan:</b> {{recipe.vegan}}</div>
+              <div v-if="$root.store.username"><b>watched:</b> {{recipe.watched}}</div>
+              <div v-if="$root.store.username"><b>saved:</b> {{recipe.favorite}}</div>
             </div>
-            Ingredients:
+            <h4>Ingredients:</h4>
             <ul>
               <li
                 v-for="(r, index) in recipe.ingredients"
@@ -24,12 +31,11 @@
             </ul>
           </div>
           <div class="wrapped">
-            Instructions:
+            <h4>Instructions:</h4>
             <ol>
-              <!-- <li v-for="s in recipe._instructions" :key="s.number">
+              <li v-for="s in recipe._instructions" :key="s.number">
                 {{ s.step }}
-              </li> -->
-              <li>{{recipe.instructions}}</li>
+              </li>
             </ol>
           </div>
         </div>
@@ -47,7 +53,8 @@
 export default {
   data() {
     return {
-      recipe: null
+      recipe: null,
+      message: null,
     };
   },
   async created() {
@@ -66,32 +73,41 @@ export default {
         this.$router.replace("/NotFound");
         return;
       }
-        console.log(response.data.data)
       let {
-        // analyzedInstructions,
+        id,
+        analyzedInstructions,
         instructions,
         ingredients,
         likes,
+        vegetarian,
+        vegan,
+        glutenFree,
+        watched,
+        favorite,
         readyInMinutes,
         image,
         title,
         servings
       } = response.data.data;
-
-      console.log("instruction");
-      // let _instructions = instructions
-      //   .map((fstep) => {
-      //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-      //     return fstep.steps;
-      //   })
-      //   .reduce((a, b) => [...a, ...b], []);
+      let _instructions = analyzedInstructions
+        // .map((fstep) => {
+        //   fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+        //   return fstep.steps;
+        // })
+        // .reduce((a, b) => [...a, ...b], []);
 
       let _recipe = {
+        id,
         instructions,
-        // _instructions,
-        // analyzedInstructions,
+        _instructions,
+        analyzedInstructions,
         ingredients,
         likes,
+        vegetarian,
+        vegan,
+        glutenFree,
+        watched,
+        favorite,
         readyInMinutes,
         image,
         title,
@@ -103,6 +119,37 @@ export default {
       console.log(error);
     }
   },
+  methods:{
+  async addToMeal(){
+      try {
+        console.log(this.recipe.id);
+        const response = await this.axios.post(
+          "http://localhost:3000/profile/addToMeal",
+          {
+            recipe_id: this.recipe.id,
+          },
+          {withCredentials: true}
+        );
+        console.log(response);
+        this.$root.store.number = this.$root.store.number+1;
+        let x = document.getElementById("meal");
+        x.style.display = "none";
+        this.message="The recipe has been added to your meal!"
+      } catch (err) {
+        if(err.response.data == "this recipe is already in your meal"){
+          let y = document.getElementById("meal");
+          y.style.display = "none";
+          this.message="The recipe is already in your meal!"
+        }
+        if(error.response.data.message === 'unauthorized'){
+          this.$root.store.logout();
+          this.$router.push("/login").catch(() => {
+            this.$forceUpdate();
+      });
+        }
+      }
+    },
+  }
 };
 </script>
 
@@ -119,7 +166,5 @@ export default {
   margin-right: auto;
   width: 50%;
 }
-/* .recipe-header{
 
-} */
 </style>
