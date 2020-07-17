@@ -1,19 +1,6 @@
 <template>
     <b-container>
       <b-row>
-        <b-col class="recipe-body">
-          <router-link
-      :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-      class="recipe-preview">
-          <!-- <img :src="recipe.image" class="recipe-image"/> -->
-          <div class="hover01 column">
-            <div>
-              <figure><img :src="recipe.image" class="recipe-image" /> </figure>
-              <span>Click to see more</span>
-            </div>
-          </div>
-          </router-link>
-        </b-col>
         <b-col class="recipe-footer">
            <div :title="recipe.title" class="recipe-title">
             {{ recipe.title }}
@@ -25,10 +12,16 @@
             <li>vegeterian: {{ recipe.vegetarian}}</li>
             <li>gluten free: {{recipe.glutenFree}}</li>
             <li>vegan: {{recipe.vegan}}</li>
-            <li v-if="$root.store.username && recipe.watched " >watched: {{recipe.watched}}</li>
-            <li v-if="$root.store.username && recipe.favorite ">saved: {{recipe.favorite}}</li>
-            <b-button pill variant="outline-danger" v-if="$root.store.username && !recipe.favorite" @click="addToFavorites">save &#128151;</b-button>
+            <li v-if="$root.store.username">watched: {{recipe.watched}}</li>
+            <li v-if="$root.store.username">favorites: {{recipe.favorite}}</li>
           </div>
+        </b-col>
+        <b-col class="recipe-body">
+          <router-link
+      :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
+      class="recipe-preview">
+          <img :src="recipe.image" class="recipe-image"/>
+          </router-link>
         </b-col>
       </b-row>
     </b-container>
