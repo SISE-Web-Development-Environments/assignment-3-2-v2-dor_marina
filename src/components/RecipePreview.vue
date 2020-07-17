@@ -12,15 +12,22 @@
             <li>vegeterian: {{ recipe.vegetarian}}</li>
             <li>gluten free: {{recipe.glutenFree}}</li>
             <li>vegan: {{recipe.vegan}}</li>
-            <li v-if="$root.store.username">watched: {{recipe.watched}}</li>
-            <li v-if="$root.store.username">favorites: {{recipe.favorite}}</li>
+            <li v-if="$root.store.username && recipe.watched " >watched: {{recipe.watched}}</li>
+            <li v-if="$root.store.username && recipe.favorite ">saved: {{recipe.favorite}}</li>
+            <b-button pill variant="outline-danger" v-if="$root.store.username && !recipe.favorite" @click="addToFavorites">save &#128151;</b-button>
           </div>
         </b-col>
         <b-col class="recipe-body">
           <router-link
       :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
       class="recipe-preview">
-          <img :src="recipe.image" class="recipe-image"/>
+          <!-- <img :src="recipe.image" class="recipe-image"/> -->
+          <div class="hover01 column">
+            <div>
+              <figure><img :src="recipe.image" class="recipe-image" /> </figure>
+              <span>Click to see more</span>
+            </div>
+          </div>
           </router-link>
         </b-col>
       </b-row>
@@ -57,14 +64,13 @@ export default {
 <style scoped>
 
 img{
-  height: 200px;
+  height: 150px;
   width: auto;
   border-radius: 8px;
   margin-bottom: 30px;
 }
 .recipe-footer{
   display:inline-block;
-  margin-left:150px;
 }
 
 .recipe-title{
@@ -89,28 +95,30 @@ img{
 	margin-left: 1em;
 	color: #333;
   font-size: 100%;
+  margin-right: 50px;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 .column div span {
 	position: absolute;
 	/* bottom: -20px; */
-	left: 0;
-	/* z-index: -0.5; */
+	/* left: 0; */
+  /* z-index: -0.5; */
 	display: block;
 	width: 300px;
-	margin: 0;
-	padding: 0;
+	/* margin: 0; */
+  /* padding: 0; */
+  padding-right: 30px;
 	color: #444;
 	font-size: 18px;
 	text-decoration: none;
-	text-align: center;
+  text-align: center;
 	-webkit-transition: .3s ease-in-out;
 	/* transition: .3s ease-in-out; */
 	opacity: 0;
 }
 figure {
-	width: 300px;
-	height: 200px;
+	width: auto;
+	height: 150px;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;

@@ -42,12 +42,13 @@ export default {
   methods:{
       async removeFromMeal(){
         try {
-            response = await this.axios.delete(
+            const response = await this.axios.delete(
             `http://localhost:3000/profile/deleteRecipeFromMeal/${this.recipe.id}`);
             console.log("deleted?")
+            this.$root.store.number = this.$root.store.number-1;
             this.$root.$emit("mealRemoved");
       } catch (error) {
-        console.log("error.response.status", error.response.status);
+        console.log("error.response.status", error);
         return;
       }
       }

@@ -1,10 +1,13 @@
 <template>
   <b-container>
     <b-col>
+      <b-row v-if="error">
+        <h5 style="text-align: center; font-style: oblique; margin-top:15px; margin-left: 27%; margin-bottom:15px">{{error}}</h5>
+        </b-row>
       <b-row v-for="r in recipes" :key="r.id">
         <MealPreview class="recipePreview" :recipe="r" />
       </b-row>
-      <b-row>
+      <b-row v-if="!error">
          <b-button pill variant="danger" size="lg" @click="removeAll">Remove All</b-button>
       </b-row>
     </b-col>
@@ -20,7 +23,8 @@ export default {
   },
   data() {
     return {
-      recipes: []
+      recipes: [],
+      error:null
     };
   },
   mounted() {
@@ -56,14 +60,23 @@ export default {
         }
         else{
           this.error = "Sorry, you don't have any recipes in your meal yet"
+          this.recipes=[];
         }
       }
     },
     async removeAll(){
-
-      this.updateRecipes();
+        try {
+            const response = await this.axios.delete(
+            `http://localhost:3000/profile/deleteAllFromMeal`);
+            console.log("deleted?")
+            this.$root.store.number = 0;
+            this.updateRecipes();
+        } catch (error) {
+          console.log("error.response.status", error);
+          return;
+        }
+      }
     },
-  }
 };
 </script>
 
@@ -81,5 +94,9 @@ export default {
   margin-bottom:70px ;
   text-align: center;
   font-weight:600;
+}
+button{
+  margin-left: 43%;
+  margin-bottom: 10px;
 }
 </style>
