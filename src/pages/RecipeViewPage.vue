@@ -57,7 +57,7 @@ export default {
 
       try {
         response = await this.axios.get(
-          `https://recipes-from-gramma.herokuapp.com/recipe/Information/${this.$route.params.recipeId}`,
+          `http://localhost:3000/recipe/Information/${this.$route.params.recipeId}`,
 
           );
         if (response.status !== 200) this.$router.replace("/NotFound");
