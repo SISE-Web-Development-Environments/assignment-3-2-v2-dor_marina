@@ -27,58 +27,73 @@
           class="button"
           >Search</b-button>
       </div>
-      <div class="flex">
-        <b-form-group
-          id="input-group-Results"
-          label-cols-sm="6"
-          label="Number of Results:"
-          label-for="Results"
-        >
-          <b-form-select
-            id="results"
-            v-model="$v.form.resultsNum.$model"
-            :options="resultsNumOptions"
-          ></b-form-select>
-        </b-form-group>
-        <b-form-group
-          id="input-group-Cuisines"
-          label-cols-sm="4"
-          label="Cuisine:"
-          label-for="Cuisine"
-          style="margin-left:10px;"
-        >
-          <b-form-select
-            id="cuisine"
-            v-model="$v.form.cuisine.$model"
-            :options="cuisines"
-          ></b-form-select>
-        </b-form-group>
-        <b-form-group
-          id="input-group-diets"
-          label-cols-sm="4"
-          label="diet:"
-          label-for="diet"
-          style="margin-left:10px;"
-        >
-          <b-form-select
-            id="diet"
-            v-model="$v.form.diet.$model"
-            :options="diets"
-          ></b-form-select>
-        </b-form-group>
-        <b-form-group
-          id="input-group-Intolerances"
-          label-cols-sm="6"
-          label="Intolerance:"
-          label-for="Intolerance"
-          style="margin-left:10px;"
-        >
-          <b-form-select
-            id="Intolerance"
-            v-model="$v.form.Intolerance.$model"
-            :options="Intolerances"
-          ></b-form-select>
-        </b-form-group>
+      <div>
+        <b-row>
+          <b-col>
+            <b-form-group
+              id="input-group-Results"
+              label-cols-sm="4"
+              label="Number of Results:"
+              label-for="Results"
+            >
+              <multiselect
+                id="results"
+                v-model="$v.form.resultsNum.$model"
+                :options="resultsNumOptions"
+                :multiple="false"
+                :show-labels="false" placeholder="Select option"
+              ></multiselect>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group
+              id="input-group-Cuisines"
+              label-cols-sm="4"
+              label="Cuisines:"
+              label-for="Cuisine"
+            >
+              <multiselect
+                id="cuisine"
+                v-model="$v.form.cuisine.$model"
+                :options="cuisines"
+                :multiple="true"
+                :show-labels="false" placeholder="Select options"
+              ></multiselect>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group
+              id="input-group-diets"
+              label-cols-sm="2"
+              label="diet:"
+              label-for="diet"
+            >
+              <multiselect
+                id="diet"
+                v-model="$v.form.diet.$model"
+                :options="diets"
+                :multiple="false"
+                :show-labels="false" placeholder="Select option"
+              ></multiselect>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group
+              id="input-group-Intolerances"
+              label-cols-sm="4"
+              label="Intolerances:"
+              label-for="Intolerance"
+            >
+              <multiselect
+                id="Intolerance"
+                v-model="$v.form.Intolerance.$model"
+                :options="Intolerances"
+                :multiple="true"
+                :show-labels="false" placeholder="Select options"
+              ></multiselect>
+            </b-form-group>
+          </b-col>
+        </b-row>
       </div>
     </b-form>
     <div id="notfound" v-if="form.submitError">
@@ -121,6 +136,7 @@
 
 
 <script>
+  import Multiselect from 'vue-multiselect'
   import RecipePreview from "C:/Users/dordo/עבודות_אוניברסיטה/סביבות פיתוח באינטרנט/3-3/assignment-3-2-v2-dor_marina/src/components/RecipePreview.vue";
   import cuisines from "../assets/cuisine.js"
   import diets from "../assets/diet.js"
@@ -129,7 +145,8 @@
   export default {
     name: "search",
     components: {
-    RecipePreview
+    RecipePreview,
+    Multiselect
    },
     data() {
     return {
@@ -142,9 +159,9 @@
       submitError: undefined
     },
     resultsNumOptions: ["5","10","15"],
-    cuisines: [{ value: null, text: "", disabled: true }],
-    diets: [{ value: null, text: "", disabled: true }],
-    Intolerances: [{ value: null, text: "", disabled: true }],
+    cuisines: [],
+    diets: [],
+    Intolerances: [],
     recipes:[],
     searched:false,
     orederByTime:false,
@@ -245,15 +262,29 @@
           parameters.numOfRecipes=this.form.resultsNum;
         }
         if(this.form.cuisine!=null){
-          parameters.cuisine=this.form.cuisine;
+          this.form.cuisine.forEach((c)=>{
+            if(parameters.cuisine==undefined){
+              parameters.cuisine=c;
+            }
+            else{
+              parameters.cuisine+=","+c;
+            }
+            });
         }
         if(this.form.Intolerance!=null){
-          parameters.intolerances=this.form.Intolerance;
+          this.form.cuisine.forEach((c)=>{
+            if(parameters.intolerances==undefined){
+              parameters.intolerances=c;
+            }
+            else{
+              parameters.intolerances+=","+c;
+            }
+            });
         }
         if(this.form.diet!=null){
           parameters.diet=this.form.diet;
         }
-        const response = await this.axios.get("https://recipes-from-gramma.herokuapp.com/recipe/search/query/"+this.form.Keyword,{
+        const response = await this.axios.get("http://localhost:3000/recipe/search/query/"+this.form.Keyword,{
          params: parameters
         });
         this.recipes=[];
@@ -278,7 +309,8 @@
   }
   }
 </script>
-<style lang="scss" scoped>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style lang="scss" scoped >
 #notfound{
   font-size:0.6cm;
 }

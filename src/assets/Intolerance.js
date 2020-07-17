@@ -1,5 +1,4 @@
 export default [
-    "",
     "Dairy",
     "Egg",
     "Gluten",

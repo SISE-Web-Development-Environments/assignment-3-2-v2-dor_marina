@@ -1,5 +1,4 @@
 export default [
-    "",
     "Gluten Free",
     "Ketogenic",
     "Vegetarian",
