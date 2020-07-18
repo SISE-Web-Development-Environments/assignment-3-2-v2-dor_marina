@@ -4,9 +4,12 @@
       <b-row v-if="error">
         <h5 style="text-align: center; font-style: oblique; margin-top:15px; margin-left: 27%; margin-bottom:15px">{{error}}</h5>
         </b-row>
-      <b-row v-for="r in recipes" :key="r.id">
-        <MealPreview class="recipePreview" :recipe="r" />
-      </b-row>
+     <div class="container" v-dragula="colOne" bag="first-bag">
+        <div v-for="(r,index) in recipes" :key="r.id">
+          <div style="font-size:30px">{{index+1}}.</div>
+            <MealPreview class="recipePreview" :recipe="r" />
+        </div>
+      </div>
       <b-row v-if="!error">
          <b-button pill variant="danger" size="lg" @click="removeAll">Remove All</b-button>
       </b-row>
@@ -16,6 +19,7 @@
 
 <script>
 import MealPreview from "./MealPreview";
+
 export default {
   name: "RecipeMealList",
   components: {
@@ -27,6 +31,10 @@ export default {
       error:null
     };
   },
+  created: function () {
+    Vue.vueDragula.options('my-bag', {
+      direction: 'vertical'
+    })},
   mounted() {
     this.updateRecipes();
     this.$root.$on("mealRemoved",()=>{
@@ -82,7 +90,17 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  min-height: 320px;
+  min-height: 200px;
+}
+
+.recipePreview:hover{
+  cursor: -webkit-grab; 
+  cursor: grab;
+}
+
+.recipePreview:active{
+cursor: -webkit-grabbing; 
+cursor: grabbing;
 }
 .title{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -99,4 +117,5 @@ button{
   margin-left: 43%;
   margin-bottom: 10px;
 }
+
 </style>

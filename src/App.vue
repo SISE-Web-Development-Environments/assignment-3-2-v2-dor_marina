@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <link rel='stylesheet' href='https://unpkg.com/emoji.css/dist/emoji.min.css'>
     <nav id="nav">
       <span id="title" :to="{ name: 'main' }">Recipes For You</span>
       <router-link :to="{ name: 'main' }" tag="a" class="a" >Home</router-link>

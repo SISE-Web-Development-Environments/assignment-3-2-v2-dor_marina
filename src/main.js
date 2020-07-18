@@ -101,7 +101,17 @@ const shared_data = {
   },
 };
 console.log(shared_data);
-// Vue.prototype.$root.store = shared_data;
+
+var VueDragula = require('vue-dragula');
+Vue.use(VueDragula);
+export class SpillComponent {
+ constructor( dragulaService) {
+    dragulaService.createGroup("SPILL", {
+      removeOnSpill: true
+    });
+  }
+}
+
 
 new Vue({
   router,

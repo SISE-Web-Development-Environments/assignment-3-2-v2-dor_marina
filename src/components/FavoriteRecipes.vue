@@ -41,10 +41,9 @@
                 for(let i=0; i<length; i++){
                     let resp;
                     resp = await this.axios.get(
-                    `https://recipes-from-gramma.herokuapp.com/recipe/Information/${ids[i]['recipe_id']}`,
+                    `http://localhost:3000/recipe/Information/${ids[i]['recipe_id']}`,
                     );
                     recipesFromAns.push(resp.data.data);
-                    console.log(resp.data.data)
                 }
                 this.recipes2.push(...recipesFromAns);
             } catch (error) {
