@@ -14,11 +14,11 @@
                       </b-col>
                       <b-col>
                         <div class="recipe-overview">
-                            <li>{{ r.durationTime }} minutes</li>
-                            <li>vegeterian: {{ r.vegetarian}}</li>
-                            <li>gluten free: {{r.gluten}}</li>
-                            <li>vegan: {{r.vegan}}</li>
-                            <li>servings: {{r.portions}}</li>
+                            <div><span class="ec ec-stopwatch"></span> {{r.durationTime }} min.</div>
+                            <span v-if="r.gluten"><img class="veg" src="../assets/glutenFree.png"/></span>
+                            <span v-if="r.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
+                            <span v-if="r.vegan"><img class="veg" src="../assets/vegan.png"/></span>
+                            <div><b>servings: {{r.portions}}</b></div>
                         </div>
                       </b-col>
                   </b-row>
@@ -94,7 +94,12 @@ img{
   margin-bottom: 30px;
   display: inline-block;
 }
-
+.veg{
+  height: 60px;
+  width: auto;
+  margin-right: 20px;
+  margin-top: 20px;
+}
 #bon{
     padding-top: 40px;
     padding-bottom: 30px;

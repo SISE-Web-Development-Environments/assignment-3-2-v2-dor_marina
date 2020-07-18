@@ -1,27 +1,32 @@
 <template>
     <b-container>
       <b-row>
-        <b-col class="recipe-footer">
-           <div :title="recipe.title" class="recipe-title">
+        <b-col>
+          <div :title="recipe.title" class="recipe-title">
             {{ recipe.title }}
           </div>
+        </b-col>
+        <b-col>
+          <div v-if="$root.store.username && isFavorite ">&#128151;already saved </div>
+          <b-button pill variant="outline-danger" v-if="$root.store.username && !isFavorite" @click="addToFavorites" style="margin-bottom:10px">save &#128151;</b-button>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col class="recipe-footer">
           <div class="recipe-overview">
-            <li v-if="recipe.readyInMinutes">{{ recipe.readyInMinutes }} minutes</li>
-            <li v-if="recipe.durationTime">{{ recipe.durationTime }} minutes</li>
-            <li v-if="recipe.like">{{ recipe.like }} likes</li>
-            <li>vegeterian: {{ recipe.vegetarian}}</li>
-            <li>gluten free: {{recipe.glutenFree}}</li>
-            <li>vegan: {{recipe.vegan}}</li>
-            <li v-if="$root.store.username && recipe.watched " >watched: {{recipe.watched}}</li>
-            <li v-if="$root.store.username && recipe.favorite ">saved: {{recipe.favorite}}</li>
-            <b-button pill variant="outline-danger" v-if="$root.store.username && !recipe.favorite" @click="addToFavorites">save &#128151;</b-button>
+            <div v-if="recipe.readyInMinutes"><span class="ec ec-stopwatch"></span> {{ recipe.readyInMinutes }} min.</div>
+            <div v-if="recipe.like"><img class="info" src="../assets/like.png"/> {{ recipe.like }} likes</div>
+            <div v-if="$root.store.username && recipe.watched " style="font-size: 15px;">You watched this recipe</div>
+            <!-- <div v-if="$root.store.username && !recipe.watched " >Click on pic to watch</div> -->
+            <span v-if="recipe.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
+             <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
+            <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
           </div>
         </b-col>
         <b-col class="recipe-body">
           <router-link
       :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
       class="recipe-preview">
-          <!-- <img :src="recipe.image" class="recipe-image"/> -->
           <div class="hover01 column">
             <div>
               <figure><img :src="recipe.image" class="recipe-image" /> </figure>
@@ -58,10 +63,38 @@ export default {
       }
     }
   },
+   computed: {
+    isFavorite() {
+      console.log(this.recipe)
+      console.log(this.recipe.favorite)
+      return this.recipe.favorite;
+    },
+    isWatched() {
+      console.log(this.recipe.watched)
+      return this.recipe.watched;
+    }
+  },
 };
 </script>
 
 <style scoped>
+
+.container{
+  max-width: 800px;
+  margin-bottom: 20px;
+}
+
+.info{
+  height: 25px;
+  width: auto;
+  margin-top: 10px;
+}
+
+.veg{
+  height: 30px;
+  width: auto;
+  margin-right: 20px;
+}
 
 img{
   height: 150px;
@@ -92,7 +125,7 @@ img{
 	transform: scale(1.3);
 }
 .column span {
-	margin-left: 1em;
+	/* margin-left: 1em; */
 	color: #333;
   font-size: 100%;
   margin-right: 50px;
@@ -126,5 +159,9 @@ figure {
 figure:hover + span {
 	/* bottom: -36px; */
 	opacity: 1;
+}
+.recipe-overview{
+  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size:18px;
 }
 </style>

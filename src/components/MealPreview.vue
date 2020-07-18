@@ -2,29 +2,26 @@
     <b-container>
       <b-row>
         <b-col class="recipe-body">
-          <router-link
-      :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-      class="recipe-preview">
-          <!-- <img :src="recipe.image" class="recipe-image"/> -->
-          <div class="hover01 column">
-            <div>
-              <figure><img :src="recipe.image" class="recipe-image" /> </figure>
-              <span>Click to make the recipe🔥</span>
-            </div>
-          </div>
-          </router-link>
+        <img :src="recipe.image" class="recipe-image"/>
         </b-col>
         <b-col class="recipe-footer">
            <div :title="recipe.title" class="recipe-title">
             {{ recipe.title }}
           </div>
           <div class="recipe-overview">
-            <li v-if="recipe.readyInMinutes">{{ recipe.readyInMinutes }} minutes</li>
-            <li v-if="recipe.durationTime">{{ recipe.durationTime }} minutes</li>
-            <li>vegeterian: {{ recipe.vegetarian}}</li>
-            <li>gluten free: {{recipe.glutenFree}}</li>
-            <li>vegan: {{recipe.vegan}}</li>
-            <b-button pill variant="secondary" @click="removeFromMeal">Remove From Meal</b-button>
+            <div v-if="recipe.readyInMinutes"><span class="ec ec-stopwatch"></span> {{ recipe.readyInMinutes }} min.</div>
+            <div v-if="recipe.durationTime"><span class="ec ec-stopwatch"></span> {{ recipe.recipe.durationTime }} min.</div>
+            <span v-if="recipe.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
+            <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
+            <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
+            <div>
+            <router-link
+            :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
+            class="recipe-preview">
+                <b-button pill size="lg" variant="danger">Make!</b-button>
+          </router-link>
+            <b-button pill variant="secondary" @click="removeFromMeal" style="margin-left: 15px;">Remove From Meal</b-button>
+            </div>
           </div>
         </b-col>
       </b-row>
@@ -59,11 +56,19 @@ export default {
 <style scoped>
 
 img{
-  height: 250px;
+  height: 150px;
   width: auto;
   border-radius: 8px;
-  margin-bottom: 30px;
+  /* margin-bottom: 10px; */
 }
+.veg{
+  height: 50px;
+  width: auto;
+  margin-right: 20px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
 .recipe-footer{
   display:inline-block;
   margin-left:150px;
@@ -77,7 +82,7 @@ img{
   text-decoration: underline;
 }
 
-.hover01 figure img {
+/* .hover01 figure img {
 	-webkit-transform: scale(1);
 	transform: scale(1);
 	-webkit-transition: .3s ease-in-out;
@@ -86,7 +91,7 @@ img{
 .hover01 figure:hover img {
 	-webkit-transform: scale(1.3);
 	transform: scale(1.3);
-}
+} */
 .column span {
 	margin-left: 1em;
 	color: #333;
@@ -117,11 +122,18 @@ figure {
     /* overflow: hidden; */
     border-radius: 8px;
   margin-bottom: 5px;
+  margin-top: 10px;
 }
 figure:hover + span {
 	/* bottom: -36px; */
     opacity: 1;
     background-color: #db7953;
     margin-left: 60px;
+}
+
+.container{
+background-color: rgba(247, 245, 224, 0.418);
+border: groove;
+margin-bottom: 5px;
 }
 </style>

@@ -11,14 +11,12 @@
         <div class="wrapper">
           <div class="wrapped">
             <div class="mb-3">
-              <div><b>Ready in</b> {{ recipe.readyInMinutes }} minutes</div>
-              <div><b>Likes:</b> {{ recipe.likes }} likes</div>
-              <div><b>Servings:</b> {{recipe.servings}}</div>
-              <div><b>Vegeterian:</b> {{ recipe.vegetarian}}</div>
-              <div><b>Gluten free:</b> {{recipe.glutenFree}}</div>
-              <div><b>Vegan:</b> {{recipe.vegan}}</div>
-              <div v-if="$root.store.username"><b>watched:</b> {{recipe.watched}}</div>
-              <div v-if="$root.store.username"><b>saved:</b> {{recipe.favorite}}</div>
+              <div><span class="ec ec-stopwatch"></span> {{ recipe.readyInMinutes }} min.</div>
+              <div><img class="info" src="../assets/like.png"/> {{ recipe.like }} likes</div>
+              <div><b>Servings: {{recipe.servings}}</b></div>
+              <!-- <div v-if="$root.store.username && recipe.watched " >You watched this recipe</div> -->
+              <!-- <div v-if="$root.store.username && isFavorite ">&#128151;already saved </div> -->
+          <!-- <b-button pill variant="outline-danger" v-if="$root.store.username && !isFavorite" @click="addToFavorites" style="margin-bottom:10px">save &#128151;</b-button> -->
             </div>
             <h4>Ingredients:</h4>
             <ul>
@@ -45,6 +43,11 @@
       {{ recipe }}
     </pre
       > -->
+    <div>
+            <span v-if="recipe.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
+             <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
+            <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
+    </div>
     </div>
   </div>
 </template>
@@ -78,7 +81,7 @@ export default {
         analyzedInstructions,
         instructions,
         ingredients,
-        likes,
+        like,
         vegetarian,
         vegan,
         glutenFree,
@@ -102,7 +105,7 @@ export default {
         _instructions,
         analyzedInstructions,
         ingredients,
-        likes,
+        like,
         vegetarian,
         vegan,
         glutenFree,
@@ -113,8 +116,8 @@ export default {
         title,
         servings
       };
-
       this.recipe = _recipe;
+      console.log(this.recipe)
     } catch (error) {
       console.log(error);
     }
@@ -149,7 +152,32 @@ export default {
         }
       }
     },
-  }
+    async addToFavorites(){
+      try {
+        const response = await this.axios.post(
+          "http://localhost:3000/recipe/addToFavorites",
+          {
+            recipe_id: this.recipe.id,
+          },
+          {withCredentials: true}
+        );
+      } catch (err) {
+        console.log(err.response);
+        this.form.submitError = err.response.data.message;
+      }
+    }
+  },
+   computed: {
+    isFavorite() {
+      console.log(this.recipe)
+      console.log(this.recipe.favorite)
+      return this.recipe.favorite;
+    },
+    isWatched() {
+      console.log(this.recipe.watched)
+      return this.recipe.watched;
+    }
+  },
 };
 </script>
 
@@ -165,6 +193,19 @@ export default {
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
+.info{
+  height: 25px;
+  width: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.veg{
+  height: 80px;
+  width: auto;
+  margin-right: 20px;
+  margin-bottom: 30px;
 }
 
 </style>

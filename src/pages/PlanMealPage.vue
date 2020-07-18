@@ -50,7 +50,7 @@ $large: 84px;
     font-family: 'Pacifico', cursive;
     // text-transform: uppercase;
     font-size: $large;
-    color: white;
+    color: rgb(247, 245, 224);
     -webkit-text-stroke-width: $stroke-width;
     -webkit-text-stroke-color: lighten(adjust-hue($yellow, -5%), 35%);
     margin-left: 30%;
