@@ -74,6 +74,11 @@ Vue.config.productionTip = false;
 const shared_data = {
   username: localStorage.username,
   number: localStorage.number,
+  pereparedRecipe:localStorage.pereparedRecipe,
+  newPreparedRecipe(pereparedRecipe){
+    localStorage.setItem("pereparedRecipe", pereparedRecipe);
+    this.pereparedRecipe=pereparedRecipe;
+  },
   setNum(number) {
     localStorage.setItem("number", number);
     this.number = number;
