@@ -93,8 +93,14 @@ export default {
             let splits = inst.split("|");
             recipes[i].instructions = splits;
             let ingr = recipes[i]['ingredients'];
-            splits = ingr.split("|");
-            recipes[i].ingredients = splits;
+            let fixedIngr=[];
+            let obj = JSON.parse(ingr);
+            let ingrLength = obj.length;
+            for(let j=0; j< ingrLength; j++){
+              let one = obj[j].amount + " " + obj[j].name;
+              fixedIngr.push(one);
+            }
+            recipes[i].ingredients = fixedIngr;
             let imgs = recipes[i]['more_photos']
             if(imgs!== null){
                 splits = imgs.split("|");

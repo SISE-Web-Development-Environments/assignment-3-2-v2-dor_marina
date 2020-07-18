@@ -32,7 +32,7 @@ export default {
     };
   },
   created: function () {
-    Vue.vueDragula.options('my-bag', {
+    Vue.vueDragula.options('first-bag', {
       direction: 'vertical'
     })},
   mounted() {
@@ -89,9 +89,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  min-height: 200px;
-}
+// .container {
+//   min-height: 200px;
+// }
 
 .recipePreview:hover{
   cursor: -webkit-grab; 
@@ -117,5 +117,42 @@ button{
   margin-left: 43%;
   margin-bottom: 10px;
 }
-
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+.container .scale-transition {
+  overflow: hidden;
+  height: 40px;
+  transition: height .2s;
+}
+.container .scale-enter {
+  height: 0px;
+}
+.container .scale-leave {
+  height: 0px;
+}
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
 </style>

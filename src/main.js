@@ -70,6 +70,11 @@ axios.interceptors.response.use(
 Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false;
+import { BProgress } from 'bootstrap-vue'
+Vue.component('b-progress', BProgress)
+
+import { BProgressBar } from 'bootstrap-vue'
+Vue.component('b-progress-bar', BProgressBar)
 
 const shared_data = {
   username: localStorage.username,

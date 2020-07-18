@@ -153,7 +153,7 @@
     form: {
       Keyword:"",
       cuisine:null,
-      resultsNum:null,
+      resultsNum:5,
       diet:null,
       Intolerance:null,
       submitError: undefined
@@ -287,6 +287,7 @@
         const response = await this.axios.get("http://localhost:3000/recipe/search/query/"+this.form.Keyword,{
          params: parameters
         });
+        console.log(parameters);
         this.recipes=[];
         this.recipes.push(...response.data.info_recipes);
         if(this.$root.store.username){

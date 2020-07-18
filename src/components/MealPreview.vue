@@ -4,6 +4,12 @@
         <b-col class="recipe-body">
         <img :src="recipe.image" class="recipe-image"/>
         </b-col>
+        <b-col v-if="inMake" id="progressBar">
+          <h4>Your Progress:</h4>
+          <b-progress style="background-color: rgba(51, 51, 51, 0.3);"   animated variant="success" height="20px">
+            <b-progress-bar :value="value" :max="max" :label="`${value}/${max}`"></b-progress-bar>
+          </b-progress>
+        </b-col>
         <b-col class="recipe-footer">
            <div :title="recipe.title" class="recipe-title">
             {{ recipe.title }}
@@ -15,12 +21,13 @@
             <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
             <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
             <div>
+              <b-button pill size="lg" variant="danger" @click="makeRecipe" style="margin-right: 15px;">Make!</b-button>
             <router-link
             :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
             class="recipe-preview">
-                <b-button pill size="lg" variant="danger">Make!</b-button>
+                
           </router-link>
-            <b-button pill variant="secondary" @click="removeFromMeal" style="margin-left: 15px;">Remove From Meal</b-button>
+            <b-button pill variant="secondary" @click="removeFromMeal" >Remove From Meal</b-button>
             </div>
           </div>
         </b-col>
@@ -36,6 +43,22 @@ export default {
       required: true
     }
   },
+  data(){
+    return{
+      inMake:false,
+      value:2,
+      max:5,
+    }
+  },
+  mounted() {
+    // this.$root.$on("how many Erased",()=>{
+    //   this.value = this.value +1;
+    // })
+    // this.$root.$on("removedInst",()=>{
+    //   this.value = this.value -1;
+    // })
+    this.max = this.recipe.analyzedInstructions.length;
+  },
   methods:{
       async removeFromMeal(){
         try {
@@ -48,6 +71,9 @@ export default {
         console.log("error.response.status", error);
         return;
       }
+      },
+      makeRecipe(){
+        this.inMake = true;
       }
   }
 };
@@ -55,11 +81,16 @@ export default {
 
 <style scoped>
 
+#progressBar{
+  margin-top:5%;
+  margin-left: -70px;
+  /* background-color: rgba(51, 51, 51, 0.205); */
+}
 img{
   height: 150px;
   width: auto;
   border-radius: 8px;
-  /* margin-bottom: 10px; */
+  margin-top: 10px;
 }
 .veg{
   height: 50px;
@@ -71,7 +102,7 @@ img{
 
 .recipe-footer{
   display:inline-block;
-  margin-left:150px;
+  /* margin-left:150px; */
 }
 
 .recipe-title{
@@ -80,6 +111,10 @@ img{
   font-weight:bolder;
   font-size:20px;
   text-decoration: underline;
+}
+
+h4{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 /* .hover01 figure img {
