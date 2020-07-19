@@ -58,7 +58,7 @@ const routes = [
     component: () => import("./pages/PlanMealPage.vue"),
   },
   {
-    path:"/Prepare/:recipe",
+    path:"/Prepare/:recipeId",
     name: "Prepare",
     component: () => import("./pages/preperationPage.vue")
   },

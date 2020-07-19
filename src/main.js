@@ -74,10 +74,12 @@ Vue.config.productionTip = false;
 const shared_data = {
   username: localStorage.username,
   number: localStorage.number,
-  pereparedRecipe:localStorage.pereparedRecipe,
-  newPreparedRecipe(pereparedRecipe){
-    localStorage.setItem("pereparedRecipe", pereparedRecipe);
-    this.pereparedRecipe=pereparedRecipe;
+  recipeStages:localStorage.recipeStages,
+  AddToMeal(recipeId){
+    localStorage.setItem(recipeId,0);
+  },
+  newStage(recipeId){
+    localStorage.setItem(recipeId,localStorage.recipeId+1);
   },
   setNum(number) {
     localStorage.setItem("number", number);
@@ -94,8 +96,7 @@ const shared_data = {
     console.log("login", this.username);
   },
   logout() {
-    localStorage.removeItem("username");
-    localStorage.removeItem("lastSearch");
+    localStorage.clear();
     this.username = undefined;
     this.lastSearch = undefined;
   },

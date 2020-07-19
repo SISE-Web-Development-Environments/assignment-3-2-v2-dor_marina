@@ -127,10 +127,9 @@ export default {
   prepareRecipe(){
     try{
       if(this.$root.store.username && !this.recipe.inMeal){
-        addToMeal();
+        this.addToMeal();
       }
-      this.$root.store.newPreparedRecipe(this.recipe);
-      this.$router.push({ name: "Prepare"});
+      this.$router.push({ name: "Prepare", recipeId:this.recipe.id});
     }
     catch (err) {
       console.log(err.response);
@@ -139,6 +138,7 @@ export default {
   },
   async addToMeal(){
       try {
+        this.$root.store.AddToMeal(this.recipe.id);
         console.log(this.recipe.id);
         const response = await this.axios.post(
           "http://localhost:3000/profile/addToMeal",
