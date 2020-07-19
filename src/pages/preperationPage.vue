@@ -84,7 +84,6 @@ export default {
 
             );
             response = response.data.data
-            if (response.status !== 200) this.$router.replace("/NotFound");
             }
           else if(this.$route.params.recipeId%2==0){
             response = await this.axios.get(
