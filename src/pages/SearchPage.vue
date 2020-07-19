@@ -23,7 +23,7 @@
         <b-button
           type="search"
           variant="primary"
-          style="width:70px;height:35px;margin-left:445px;"
+          style="width:70px;height:35px;"
           class="button"
           >Search</b-button>
       </div>

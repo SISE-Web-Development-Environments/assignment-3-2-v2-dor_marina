@@ -4,7 +4,8 @@
       <div class="recipe-header mt-3 mb-4">
         <h1 style="text-align: center; font-style: oblique; margin-bottom:15px;">{{ recipe.title }}</h1>
         <img :src="recipe.image" class="center" style="filter: contrast(150%); border-radius: 8px;"/>
-         <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username && !recipe.inMeal" @click="addToMeal" style="margin-top:2px">Add To Meal👨‍🍳</b-button>
+         <b-button id="prepare" pill size="lg" variant="dark" @click="prepareRecipe" style="margin-top:2px; margin-right:20px">Prepare Recipe 👨‍🍳</b-button>
+         <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username && !recipe.inMeal" @click="addToMeal" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
          <div v-if="message">{{message}}</div>
       </div>
       <div class="recipe-body">
@@ -125,8 +126,21 @@ export default {
     }
   },
   methods:{
+  prepareRecipe(){
+    try{
+      if(this.$root.store.username && !this.recipe.inMeal){
+        this.addToMeal();
+      }
+      this.$router.push({ name: "Prepare", recipeId:this.recipe.id});
+    }
+    catch (err) {
+      console.log(err.response);
+      this.form.submitError = err.response.data.message;
+    }
+  },
   async addToMeal(){
       try {
+        this.$root.store.AddToMeal(this.recipe.id);
         console.log(this.recipe.id);
         const response = await this.axios.post(
           "http://localhost:3000/profile/addToMeal",
