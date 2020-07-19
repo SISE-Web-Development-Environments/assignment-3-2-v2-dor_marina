@@ -43,7 +43,8 @@
             <h4>Instructions:</h4>
               <div v-for="s in recipe._instructions" :key="s.number">
                 <input type="checkbox" :disabled="isDisabled" style="margin-left:-15px;">
-                {{ s.step }}
+                <span v-if="s.step">{{ s.step }}</span>
+                  <span v-else>{{s}}</span>
               </div>
           </div>
         </div>
@@ -73,18 +74,34 @@ export default {
     };
   },
   async created() {
-      if(this.$route.params.recipeId>1000){
+      
         try {
         let response;
-        // response = this.$route.params.response;
-
         try {
+          if(this.$route.params.recipeId>20){
           response = await this.axios.get(
             `http://localhost:3000/recipe/Information/${this.$route.params.recipeId}`,
 
             );
-          if (response.status !== 200) this.$router.replace("/NotFound");
+            response = response.data.data
+            if (response.status !== 200) this.$router.replace("/NotFound");
+            }
+          else if(this.$route.params.recipeId%2==0){
+            response = await this.axios.get(
+            "http://localhost:3000/profile/familyRecipesWhole");
+            const recipes = response.data;
+            for(let j=0; j<recipes.length; j++){
+              if(recipes[j].id == this.$route.params.recipeId){
+                response = recipes[j];
+              }
+            }
+          }else{
+            response = await this.axios.get(
+          `http://localhost:3000/recipe/recipeByID/${this.$route.params.recipeId}`);
+          response = response.data[0];
+          }
         } catch (error) {
+          console.log(error);
           console.log("error.response.status", error.response.status);
           this.$router.replace("/NotFound");
           return;
@@ -104,14 +121,15 @@ export default {
           image,
           title,
           servings
-        } = response.data.data;
+        } = response;
         let _instructions = analyzedInstructions
-          // .map((fstep) => {
-          //   fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-          //   return fstep.steps;
-          // })
-          // .reduce((a, b) => [...a, ...b], []);
-
+          if(this.$route.params.recipeId<=20){
+            let inst = instructions;
+            let splits = inst.split("|");
+            _instructions = splits;
+            ingredients = JSON.parse(ingredients);
+          }
+          console.log(_instructions);
         let _recipe = {
           id,
           instructions,
@@ -130,10 +148,8 @@ export default {
           servings
         };
         this.recipe = _recipe;
-        console.log(this.recipe)
       } catch (error) {
         console.log(error);
-      }
       }
   },
   computed:{

@@ -1,11 +1,11 @@
 <template>
  <div id="main">
-      <div v-for="r in recipes" :key="r.recipe_id">
+      <div v-for="r in recipes" :key="r.id">
              <RecipePreview class="recipePreview" :recipe="r" />
           <b-container>
               <b-row>
                   <b-col>
-                     <h3 style="padding-bottom: 10px; text-decoration: underline;"> {{r.recipe_name}}</h3>
+                     <h3 style="padding-bottom: 10px; text-decoration: underline;"> {{r.title}}</h3>
                   </b-col>
                 </b-row>
                   <b-row>
@@ -14,11 +14,13 @@
                       </b-col>
                       <b-col>
                         <div class="recipe-overview">
-                            <div><span class="ec ec-stopwatch"></span> {{r.durationTime }} min.</div>
-                            <span v-if="r.gluten"><img class="veg" src="../assets/glutenFree.png"/></span>
+                            <div><span class="ec ec-stopwatch"></span> {{r.readyInMinutes }} min.</div>
+                            <span v-if="r.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
                             <span v-if="r.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
                             <span v-if="r.vegan"><img class="veg" src="../assets/vegan.png"/></span>
                             <div><b>servings: {{r.portions}}</b></div>
+                            <b-button id="prepare" pill size="lg" variant="dark" @click="prepareRecipe(r.id)" style="margin-top:2px; margin-right:20px">Prepare Recipe <span class="ec ec-fork-and-knife"></span></b-button>
+                            <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username" @click="addToMeal(r.id)" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
                         </div>
                       </b-col>
                   </b-row>
@@ -64,7 +66,7 @@ export default {
           `http://localhost:3000/recipe/recipeByID/${this.$route.params.recipeId}`
         );
         const recipes = response.data;
-        console.log(response.data)
+        // console.log(response.data)
         let length = recipes.length;
         for(let i=0; i<length; i++){
             let inst = recipes[i]['instructions'];
@@ -85,6 +87,48 @@ export default {
       } catch (error) {
         console.log(error);
       }
+  },
+  methods:{
+async addToMeal(recipe_id){
+      try {
+        this.$root.store.AddToMeal(recipe_id);
+        const response = await this.axios.post(
+          "http://localhost:3000/profile/addToMeal",
+          {
+            recipe_id: recipe_id,
+          },
+          {withCredentials: true}
+        );
+        this.$root.store.number = this.$root.store.number+1;
+        let x = document.getElementById("meal");
+        x.style.display = "none";
+        // this.message="The recipe has been added to your meal!"
+      } catch (err) {
+        if(err.response.data == "this recipe is already in your meal"){
+          let y = document.getElementById("meal");
+          y.style.display = "none";
+          // this.message="The recipe is already in your meal!"
+        }
+        if(error.response.data.message === 'unauthorized'){
+          this.$root.store.logout();
+          this.$router.push("/login").catch(() => {
+            this.$forceUpdate();
+      });
+        }
+      }
+    },
+    prepareRecipe(recipe_id){
+    try{
+      if(this.$root.store.username){
+        this.addToMeal(recipe_id);
+      }
+      this.$router.push({ name: "Prepare", recipeId:recipe_id});
+    }
+    catch (err) {
+      console.log(err.response);
+      this.form.submitError = err.response.data.message;
+    }
+  },
   }
 };
 </script>

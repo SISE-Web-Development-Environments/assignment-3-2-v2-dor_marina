@@ -31,10 +31,10 @@ export default {
       error:null
     };
   },
-  created: function () {
-    Vue.vueDragula.options('first-bag', {
-      direction: 'vertical'
-    })},
+  // created: function () {
+  //   Vue.vueDragula.options('first-bag', {
+  //     direction: 'vertical'
+  //   })},
   mounted() {
     this.updateRecipes();
     this.$root.$on("mealRemoved",()=>{
@@ -54,13 +54,32 @@ export default {
         this.recipes = [];
         for(let i=0; i<length; i++){
             let resp;
+            let id = ids[i]['recipe_id'];
+            if(id>20){
             resp = await this.axios.get(
             `http://localhost:3000/recipe/Information/${ids[i]['recipe_id']}`,
             );
             recipesFromAns.push(resp.data.data);
+            }
+            else if(id%2 == 0){
+             resp = await this.axios.get(
+          "http://localhost:3000/profile/familyRecipesWhole");
+            const recipes = resp.data;
+            for(let j=0; j<recipes.length; j++){
+              if(recipes[j].id == id){
+                recipesFromAns.push(recipes[j]);
+              }
+            }
+            }
+            else{
+            resp = await this.axios.get(
+          `http://localhost:3000/recipe/recipeByID/${id}`);
+            recipesFromAns.push(resp.data[0]);
+            }
         }
         this.recipes.push(...recipesFromAns);
       } catch (error) {
+        console.log(error);
         if(error.response.data.message === 'unauthorized'){
           this.$root.store.logout();
           this.$router.push("/login").catch(() => {
@@ -76,7 +95,6 @@ export default {
         try {
             const response = await this.axios.delete(
             `http://localhost:3000/profile/deleteAllFromMeal`);
-            console.log("deleted?")
             this.$root.store.number = 0;
             this.updateRecipes();
         } catch (error) {

@@ -3,7 +3,7 @@
       <div id="mainTitle">
           Personal Recipes
       </div>
-      <div v-for="r in recipes" :key="r.recipe_id">
+      <div v-for="r in recipes" :key="r.id">
              <RecipePreview class="recipePreview" :recipe="r" />
       </div>
   </div>

@@ -16,12 +16,12 @@
           </div>
           <div class="recipe-overview">
             <div v-if="recipe.readyInMinutes"><span class="ec ec-stopwatch"></span> {{ recipe.readyInMinutes }} min.</div>
-            <div v-if="recipe.durationTime"><span class="ec ec-stopwatch"></span> {{ recipe.recipe.durationTime }} min.</div>
+            <div v-if="recipe.durationTime"><span class="ec ec-stopwatch"></span> {{ recipe.durationTime }} min.</div>
             <span v-if="recipe.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
             <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
             <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
             <div>
-              <b-button pill size="lg" variant="danger" @click="makeRecipe" style="margin-right: 15px;">Make!</b-button>
+              <b-button pill size="lg" variant="danger" @click="makeRecipe(recipe.id)" style="margin-right: 15px;">Make!</b-button>
             <router-link
             :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
             class="recipe-preview">
@@ -45,32 +45,25 @@ export default {
   },
   data(){
     return{
-      value:0,
+      value:3,
       max:0,
     }
   },
   mounted() {
-    // this.$root.$on("how many Erased",()=>{
-    //   this.value = this.value +1;
-    // })
-    // this.$root.$on("removedInst",()=>{
-    //   this.value = this.value -1;
-    // })
-    // console.log(this.recipe.analyzedInstruction)
+    // console.log(this.recipe);
     if(this.recipe.analyzedInstructions !== undefined){
     this.max = this.recipe.analyzedInstructions.length;
     }
     else{
       this.max = this.recipe.instructions.length;
     }
-    this.value = this.localStorage.getItem(this.recipe.id);
+    // this.value = this.localStorage.getItem(this.recipe.id);
   },
   methods:{
       async removeFromMeal(){
         try {
             const response = await this.axios.delete(
             `http://localhost:3000/profile/deleteRecipeFromMeal/${this.recipe.id}`);
-            console.log("deleted?")
             this.$root.store.number = this.$root.store.number-1;
             this.$root.$emit("mealRemoved");
       } catch (error) {
@@ -78,8 +71,9 @@ export default {
         return;
       }
       },
-      makeRecipe(){
-        this.inMake = true;
+      makeRecipe(recipe_id){
+        console.log(recipe_id);
+        this.$router.push({ name: "Prepare", params: { recipeId: recipe_id }});
       }
   }
 };

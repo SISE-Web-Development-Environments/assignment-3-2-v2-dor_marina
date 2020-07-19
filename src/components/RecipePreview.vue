@@ -67,12 +67,9 @@ export default {
   },
    computed: {
     isFavorite() {
-      console.log(this.recipe)
-      console.log(this.recipe.favorite)
       return this.recipe.favorite;
     },
     isWatched() {
-      console.log(this.recipe.watched)
       return this.recipe.watched;
     }
   },

@@ -1,20 +1,20 @@
 <template>
     <b-container>
         <b-row style="text-align: center;">
-            <div :title="recipe.recipe_name" class="recipe-title">
-            {{ recipe.recipe_name }}
+            <div :title="recipe.title" class="recipe-title">
+            {{ recipe.title }}
           </div>
         </b-row>
         <b-row>
             <b-col class="recipe-body">
-                <router-link :to="{ name: 'personalRecipe', params: { recipeId: recipe.recipe_id } }" class="recipe-preview">
+                <router-link :to="{ name: 'personalRecipe', params: { recipeId: recipe.id } }" class="recipe-preview">
                     <img :src="recipe.image" class="recipe-image"/>
                 </router-link>
             </b-col>
             <b-col class="recipe-footer">
             <div class="recipe-overview">
-                <div><span class="ec ec-stopwatch"></span> {{recipe.durationTime }} min.</div>
-                <span v-if="recipe.gluten"><img class="veg" src="../assets/glutenFree.png"/></span>
+                <div><span class="ec ec-stopwatch"></span> {{recipe.readyInMinutes }} min.</div>
+                <span v-if="recipe.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
                 <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
                 <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
             </div>

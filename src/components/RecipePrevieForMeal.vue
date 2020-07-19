@@ -19,7 +19,6 @@
           </div>
           <div class="recipe-overview">
             <li v-if="recipe.readyInMinutes">{{ recipe.readyInMinutes }} minutes</li>
-            <li v-if="recipe.durationTime">{{ recipe.durationTime }} minutes</li>
             <li v-if="recipe.like">{{ recipe.like }} likes</li>
             <li>vegeterian: {{ recipe.vegetarian}}</li>
             <li>gluten free: {{recipe.glutenFree}}</li>

@@ -98,7 +98,6 @@ const shared_data = {
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
-    console.log("login", this.username);
   },
   logout() {
     localStorage.clear();
@@ -106,7 +105,7 @@ const shared_data = {
     this.lastSearch = undefined;
   },
 };
-console.log(shared_data);
+// console.log(shared_data);
 
 var VueDragula = require('vue-dragula');
 Vue.use(VueDragula);

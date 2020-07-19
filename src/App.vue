@@ -53,7 +53,6 @@ export default {
             "http://localhost:3000/profile/getNumberInMeal",
           );
           this.$root.store.setNum(response.data);
-          console.log(this.$root.store.number)
        } catch (error) {
         console.log(error);
       }

@@ -3,11 +3,11 @@
       <div id="mainTitle">
           Family Recipes
       </div>
-      <div v-for="r in recipes" :key="r.recipe_id">
+      <div v-for="r in recipes" :key="r.id">
           <b-container>
               <b-row>
                   <b-col>
-                     <h3 style="padding-bottom: 10px; text-decoration: underline;"> {{r.recipe_name}}</h3>
+                     <h3 style="padding-bottom: 10px; text-decoration: underline;"> {{r.title}}</h3>
                   </b-col>
                 </b-row>
                 <b-row>
@@ -21,13 +21,15 @@
                       </b-col>
                       <b-col>
                         <div class="recipe-overview">
-                            <li>{{ r.durationTime }} minutes</li>
+                            <li>{{ r.readyInMinutes}} minutes</li>
                             <li>Vegeterian: {{ r.vegetarian}}</li>
-                            <li>Gluten free: {{r.gluten}}</li>
+                            <li>Gluten free: {{r.glutenFree}}</li>
                             <li>Vegan: {{r.vegan}}</li>
-                            <li>Servings: {{r.portions}}</li>
+                            <li>Servings: {{r.servings}}</li>
                             <li>Usualy prepared in: {{r.usually_prepared}}</li>
                             <li>Main country: {{r.main_country}}</li>
+                            <b-button id="prepare" pill size="lg" variant="dark" @click="prepareRecipe(r.id)" style="margin-top:2px; margin-right:20px">Prepare Recipe <span class="ec ec-fork-and-knife"></span></b-button>
+                            <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username" @click="addToMeal(r.id)" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
                         </div>
                       </b-col>
                   </b-row>
@@ -74,7 +76,7 @@ export default {
   name:"Personal",
     data(){
         return{
-            recipes:[]
+            recipes:[],
         }
     },
     mounted(){
@@ -119,11 +121,52 @@ export default {
         }
       }
         },
+         async addToMeal(recipe_id){
+      try {
+        this.$root.store.AddToMeal(recipe_id);
+        const response = await this.axios.post(
+          "http://localhost:3000/profile/addToMeal",
+          {
+            recipe_id: recipe_id,
+          },
+          {withCredentials: true}
+        );
+        this.$root.store.number = this.$root.store.number+1;
+        let x = document.getElementById("meal");
+        x.style.display = "none";
+        // this.message="The recipe has been added to your meal!"
+      } catch (err) {
+        if(err.response.data == "this recipe is already in your meal"){
+          let y = document.getElementById("meal");
+          y.style.display = "none";
+          // this.message="The recipe is already in your meal!"
+        }
+        if(error.response.data.message === 'unauthorized'){
+          this.$root.store.logout();
+          this.$router.push("/login").catch(() => {
+            this.$forceUpdate();
+      });
+        }
+      }
+    },
+    prepareRecipe(recipe_id){
+    try{
+      if(this.$root.store.username){
+        this.addToMeal(recipe_id);
+      }
+      this.$router.push({ name: "Prepare", recipeId:recipe_id});
+    }
+    catch (err) {
+      console.log(err.response);
+      this.form.submitError = err.response.data.message;
+    }
+  },
     }
 }
 </script>
 
 <style scoped>
+
 .container {
   min-height: 320px;
 }

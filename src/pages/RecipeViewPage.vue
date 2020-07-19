@@ -4,7 +4,7 @@
       <div class="recipe-header mt-3 mb-4">
         <h1 style="text-align: center; font-style: oblique; margin-bottom:15px;">{{ recipe.title }}</h1>
         <img :src="recipe.image" class="center" style="filter: contrast(150%); border-radius: 8px;"/>
-         <b-button id="prepare" pill size="lg" variant="dark" @click="prepareRecipe" style="margin-top:2px; margin-right:20px">Prepare Recipe 👨‍🍳</b-button>
+         <b-button id="prepare" pill size="lg" variant="dark" @click="prepareRecipe" style="margin-top:2px; margin-right:20px">Prepare Recipe <span class="ec ec-fork-and-knife"></span></b-button>
          <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username && !recipe.inMeal" @click="addToMeal" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
          <div v-if="message">{{message}}</div>
       </div>
@@ -120,7 +120,6 @@ export default {
         servings
       };
       this.recipe = _recipe;
-      console.log(this.recipe)
     } catch (error) {
       console.log(error);
     }
@@ -128,7 +127,7 @@ export default {
   methods:{
   prepareRecipe(){
     try{
-      if(this.$root.store.username && !this.recipe.inMeal){
+      if(this.$root.store.username){
         this.addToMeal();
       }
       this.$router.push({ name: "Prepare", recipeId:this.recipe.id});
