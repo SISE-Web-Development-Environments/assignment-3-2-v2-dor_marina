@@ -11,7 +11,7 @@
           Username length should be between 3-8 characters long
         </b-form-invalid-feedback>
         <b-form-invalid-feedback v-if="!$v.form.username.alpha">
-          Username alpha
+          Username must contain only letters
         </b-form-invalid-feedback>
       </b-form-group>
 

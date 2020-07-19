@@ -3,7 +3,7 @@
     <b-container class="bv-example-row">
       <b-row>
         <b-col>
-          <RecipePreviewList title="Explore this recipes" class="RandomRecipes center" />
+          <RecipePreviewList title="Explore these recipes" class="RandomRecipes center" />
         </b-col>
         <b-col>
           <span v-if="!$root.store.username">

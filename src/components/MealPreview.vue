@@ -4,9 +4,9 @@
         <b-col class="recipe-body">
         <img :src="recipe.image" class="recipe-image"/>
         </b-col>
-        <b-col v-if="inMake" id="progressBar">
+        <b-col id="progressBar">
           <h4>Your Progress:</h4>
-          <b-progress style="background-color: rgba(51, 51, 51, 0.3);"   animated variant="success" height="20px">
+          <b-progress style="background-color: rgba(51, 51, 51, 0.3);"   animated variant="success" height="25px">
             <b-progress-bar :value="value" :max="max" :label="`${value}/${max}`"></b-progress-bar>
           </b-progress>
         </b-col>
@@ -45,9 +45,8 @@ export default {
   },
   data(){
     return{
-      inMake:false,
-      value:2,
-      max:5,
+      value:0,
+      max:0,
     }
   },
   mounted() {
@@ -57,7 +56,14 @@ export default {
     // this.$root.$on("removedInst",()=>{
     //   this.value = this.value -1;
     // })
+    // console.log(this.recipe.analyzedInstruction)
+    if(this.recipe.analyzedInstructions !== undefined){
     this.max = this.recipe.analyzedInstructions.length;
+    }
+    else{
+      this.max = this.recipe.instructions.length;
+    }
+    this.value = this.localStorage.getItem(this.recipe.id);
   },
   methods:{
       async removeFromMeal(){

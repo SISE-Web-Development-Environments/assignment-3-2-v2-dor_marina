@@ -16,11 +16,13 @@
           <div class="recipe-overview">
             <div v-if="recipe.readyInMinutes"><span class="ec ec-stopwatch"></span> {{ recipe.readyInMinutes }} min.</div>
             <div v-if="recipe.like"><img class="info" src="../assets/like.png"/> {{ recipe.like }} likes</div>
-            <div v-if="$root.store.username && recipe.watched " style="font-size: 15px;">You watched this recipe</div>
+            <!-- <div v-if="$root.store.username && recipe.watched "><img class="info" src="../assets/seen.png"/></div> -->
             <!-- <div v-if="$root.store.username && !recipe.watched " >Click on pic to watch</div> -->
             <span v-if="recipe.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
              <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
             <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
+             <span v-if="$root.store.username && recipe.watched "><img class="veg" src="../assets/seen.png"/></span>
+             <span v-if="$root.store.username && !recipe.watched "><img class="veg" src="../assets/notSeen.png"/></span>
           </div>
         </b-col>
         <b-col class="recipe-body">
@@ -83,7 +85,6 @@ export default {
   max-width: 800px;
   margin-bottom: 20px;
 }
-
 .info{
   height: 25px;
   width: auto;

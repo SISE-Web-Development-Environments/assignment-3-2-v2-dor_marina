@@ -4,7 +4,7 @@
       <div class="recipe-header mt-3 mb-4">
         <h1 style="text-align: center; font-style: oblique; margin-bottom:15px;">{{ recipe.title }}</h1>
         <img :src="recipe.image" class="center" style="filter: contrast(150%); border-radius: 8px;"/>
-         <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username && !recipe.inMeal" @click="addToMeal" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
+         <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username && !recipe.inMeal" @click="addToMeal" style="margin-top:2px">Add To Meal👨‍🍳</b-button>
          <div v-if="message">{{message}}</div>
       </div>
       <div class="recipe-body">
@@ -47,6 +47,8 @@
             <span v-if="recipe.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
              <span v-if="recipe.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
             <span v-if="recipe.vegan"><img class="veg" src="../assets/vegan.png"/></span>
+            <span v-if="$root.store.username && recipe.watched "><img class="veg" src="../assets/seen.png"/></span>
+             <span v-if="$root.store.username && !recipe.watched "><img class="veg" src="../assets/notSeen.png"/></span>
     </div>
     </div>
   </div>
