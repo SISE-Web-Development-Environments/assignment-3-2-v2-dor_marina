@@ -25,26 +25,28 @@
           <!-- <b-button pill variant="outline-danger" v-if="$root.store.username && !isFavorite" @click="addToFavorites" style="margin-bottom:10px">save &#128151;</b-button> -->
             </div>
             <h5>Please check that you have all of the ingredients:</h5>
-            <ul>
                     <div>
-                        <input type="checkbox" v-model="markAllIngredients">
+                        <input id="mainCheck" type="checkbox" v-model="markAllIngredients" @change="checkAll($event)">
                         <b>I have all of the ingredients</b>
                     </div>
-                    <div
-                        v-for="(r, index) in recipe.ingredients"
-                        :key="index + '_' + r.id"
-                    >
-                        <input :id="index" type="checkbox" v-model="markAll">
-                        {{ r.amount*amount }} {{r.unit}}  {{r.name}}
+                    <div ref="ingri">
+                      <div 
+                          v-for="(r, index) in recipe.ingredients"
+                          :key="index + '_' + r.id"
+                      >
+                          <input type="checkbox" @change="check($event)">
+                          {{ r.amount*amount }} {{r.unit}}  {{r.name}}
+                      </div>
                     </div>
-            </ul>
           </div>
           <div class="wrapped">
             <h4>Instructions:</h4>
+            <div ref=steps>
               <div v-for="s in recipe._instructions" :key="s.number">
-                <input type="checkbox" :disabled="isDisabled" style="margin-left:-15px;">
+                <input type="checkbox" disabled @change="changeStage" style="margin-left:-15px;">
                 {{ s.step }}
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -62,17 +64,19 @@
   </div>
 </template>
 <script>
-import {BFormCheckbox} from 'bootstrap-vue' 
+import $ from 'jquery'
 export default {
     data() {
     return {
+      index:0,
       recipe: null,
       amount:1,
       disable:true,
-      markAllIngredients:false
+      markAllIngredients:false,
+      numberIngridiaintsMarked:0
     };
   },
-  async created() {
+  async mounted() {
       if(this.$route.params.recipeId>1000){
         try {
         let response;
@@ -134,28 +138,98 @@ export default {
       } catch (error) {
         console.log(error);
       }
-      }
+      if(localStorage.getItem(this.recipe.id)>0){
+        this.markAllIngredients=true;
+        this.$nextTick(function () {
+          this.checkAndDisable();
+          for(let i=0; i<this.recipe.ingredients.length;i++){
+            let temp=this.$refs.ingri;
+            temp.children[i].children[0].checked=true;
+          }
+        });
+    }
+    }
   },
   computed:{
-      markAll: function(){
-          return this.markAllIngredients;
-      },
-      isDisabled: function(index){
-          if(index==0){
-            if(this.allMarked()){
-              return true;
-            }
-             return false;
-          }
-          else{
-            if(index<=localStorage.getItem(this.recipe.id)){
-              return true;
-            }
-          }
+      allMarked: function(){
+        if(this.numberIngridiaintsMarked==this.recipe.ingredients.length){
           return false;
+        }
+        return true;
       }
   },
   methods:{
+      changeStage(){
+        if( !this.$refs.steps.children[0].children[0].checked){
+            localStorage.setItem(this.recipe.id,0);
+        }
+        else{
+          for(let i=0; i<this.recipe._instructions.length;i++){
+            if( this.$refs.steps.children[i].children[0].checked){
+              localStorage.setItem(this.recipe.id,i+1);
+            }
+            else{
+              break;
+            }
+          }
+        }
+        this.checkAndDisable();
+      },
+      checkAndDisable(){
+        let stage=localStorage.getItem(this.recipe.id);
+        for(let i=0; i<this.recipe._instructions.length;i++){
+          if(i<stage){
+            this.$refs.steps.children[i].children[0].disabled=false;
+            this.$refs.steps.children[i].children[0].checked=true;
+          }
+          else if(i==stage){
+            this.$refs.steps.children[i].children[0].disabled=false;
+            this.$refs.steps.children[i].children[0].checked=false;
+          }
+          else{
+            this.$refs.steps.children[i].children[0].disabled=true;
+            this.$refs.steps.children[i].children[0].checked=false;
+          }
+        }
+      },
+      checkAll(c){
+        if(c.currentTarget.checked){
+          for(let i=0; i<this.recipe.ingredients.length;i++){
+            let temp=this.$refs.ingri;
+            temp.children[i].children[0].checked=true;
+          }
+          this.numberIngridiaintsMarked=this.recipe.ingredients.length;
+          localStorage.setItem(this.recipe.id,0);
+          this.checkAndDisable();
+        }
+        else{
+          for(let i=0; i<this.recipe.ingredients.length;i++){
+            this.$refs.ingri.children[i].children[0].checked=false;
+          }
+          localStorage.setItem(this.recipe.id,0);
+          this.numberIngridiaintsMarked=0;
+          localStorage.setItem(this.recipe.id,0);
+          this.checkAndDisable();
+          this.$refs.steps.children[0].children[0].disabled=true;
+        }
+      },
+      check(c){
+        if(c.currentTarget.checked){
+          this.numberIngridiaintsMarked++;
+        }
+        else{
+          this.markAllIngredients=false;
+          this.numberIngridiaintsMarked--;
+          localStorage.setItem(this.recipe.id,0);
+          this.checkAndDisable();
+          this.$refs.steps.children[0].children[0].disabled=true;
+        }
+        if(this.numberIngridiaintsMarked==this.recipe.ingredients.length){
+          this.markAllIngredients=true;
+          localStorage.setItem(this.recipe.id,0);
+          this.checkAndDisable();
+        }
+      },
       Increment(){
           this.amount++;
           this.disable=false;
@@ -166,15 +240,7 @@ export default {
           if(this.amount==1){
             this.disable=true;
           }
-      },
-      allMarked(){
-          for(i=0; i<recipe.ingredients.length; i++){
-              if(!$('#'+i+':checked').val()){
-                  return false;
-              }
-          }
-          return true;
-      },
+      }
   }
 };
 </script>
