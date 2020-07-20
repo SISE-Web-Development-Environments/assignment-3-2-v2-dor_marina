@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "runtimeExecutable": "C:/PROGRA~1/nodejs/node.exe",
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\codes\\main.js",
+            "env": {
+                "tedious_userName":"marina",
+                "tedious_password":"dorMar123456!",
+                "tedious_server":"serverproject.database.windows.net",
+                "tedious_database":"recipesForGramma",
+                "COOKIE_SECRET":"this_is_my_secret",
+                "spooncular_apiKey":"9b7738ea2fc74faf88c6a855fa0dc137",
+                "bcrypt_saltRounds":"13"
+            }
+        }
+    ]
+}
