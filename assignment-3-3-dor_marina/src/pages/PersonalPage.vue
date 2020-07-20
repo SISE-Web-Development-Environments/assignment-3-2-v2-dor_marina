@@ -73,7 +73,7 @@ export default {
   padding-top: 1%;
 }
 img{
-  height: 200px;
+  height: 150px;
   width: auto;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -90,7 +90,7 @@ img{
   -webkit-text-fill-color: transparent;
   padding-left: 35%;
 }
-.col{
+.recipePreview{
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     background-color: rgba(255, 255, 240, 0.39);
 }

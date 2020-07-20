@@ -9,9 +9,8 @@
             <MealPreview class="recipePreview" :recipe="r"/>
         </div>
       </div>
-      <b-row v-if="!error">
+      <b-row>
          <b-button pill variant="danger" size="lg" @click="removeAll">Remove All</b-button>
-         <b-button @click="testModify">Update numbers</b-button>
       </b-row>
     </b-col>
   </b-container>
@@ -28,7 +27,6 @@ export default {
   data() {
     return {
       recipes: [],
-      error:null,
     };
   },
   // created: function () {
