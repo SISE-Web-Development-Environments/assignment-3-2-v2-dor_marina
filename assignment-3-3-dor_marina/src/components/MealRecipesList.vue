@@ -1,18 +1,25 @@
 <template>
-  <b-container>
-    <b-col>
+  <b-container> 
       <b-row v-if="error">
         <h5 style="text-align: center; font-style: oblique; margin-top:15px; margin-left: 27%; margin-bottom:15px">{{error}}</h5>
-        </b-row>
-     <div class="container" v-dragula="colOne" bag="first-bag">
-        <div v-for="(r) in recipes" :key="r.id">
-            <MealPreview class="recipePreview" :recipe="r"/>
-        </div>
-      </div>
+      </b-row>
+      <b-row>
+        <b-col cols="1">
+           <b-row class="index" v-for="(r,index) in recipes" :key="r.id">
+            {{index+1}}.
+           </b-row>
+        </b-col>
+        <b-col cols="11">
+        <div class="container" v-dragula="colOne" bag="first-bag">
+            <b-row v-for="(r) in recipes" :key="r.id">
+                <MealPreview class="recipePreview" :recipe="r"/>
+            </b-row>
+          </div>  
+        </b-col>       
+      </b-row>
       <b-row>
          <b-button pill variant="danger" size="lg" @click="removeAll">Remove All</b-button>
       </b-row>
-    </b-col>
   </b-container>
 </template>
 
@@ -120,9 +127,12 @@ export default {
 // .container {
 //   min-height: 200px;
 // }
-#index{
-  position:static;
+.index{
+  // position:fixed;
   font-size:30px;
+  margin-bottom: 130px;
+  text-align: right;
+  margin-left:50px;
 }
 .recipePreview:hover{
   cursor: -webkit-grab; 

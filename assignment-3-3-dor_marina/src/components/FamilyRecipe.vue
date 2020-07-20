@@ -25,7 +25,7 @@
                             <li>Main country: {{recipe.main_country}}</li>
                             <b-button id="prepare" pill size="lg" variant="dark" @click="prepareRecipe(recipe.id)" style="margin-top:2px; margin-right:20px">Prepare Recipe <span class="ec ec-fork-and-knife"></span></b-button>
                             <b-button id="meal" pill size="lg" variant="dark" @click="addToMeal(recipe.id)" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
-                            <li v-if="this.message">{{this.message}}</li>
+                            <li v-if="message">{{message}}</li>
                         </div>
                       </b-col>
                   </b-row>
@@ -83,7 +83,7 @@ export default {
         async addToMeal(recipe_id){
             try {
                 this.message="";
-                // this.$root.store.AddToMeal(recipe_id);
+                this.$root.store.AddToMeal(recipe_id);
                 const response = await this.axios.post(
                 "http://localhost:3000/profile/addToMeal",
                 {

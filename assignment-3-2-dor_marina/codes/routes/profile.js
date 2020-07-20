@@ -29,7 +29,6 @@ router.get('/getNumberInMeal', async (req, res, next) => {
   try{
   const watched = ( await DButils.execQuery( `SELECT recipe_id FROM MealRecipes WHERE user_id = '${req.session.user_id}' `)) 
   const length = watched.length;
-  console.log(length);
   res.status(200).send(length.toString());
   }
   catch(error){

@@ -211,9 +211,7 @@ async function getPreveuInfo(recipe, req) {
   };
   if(req.session.user_id){
     let watched = await isWatched(recipe,req)
-    console.log(watched);
     let favorite = await isFavorite(recipe,req);
-    console.log(favorite)
     preveu.watched=watched;
     preveu.favorite=favorite;
   }

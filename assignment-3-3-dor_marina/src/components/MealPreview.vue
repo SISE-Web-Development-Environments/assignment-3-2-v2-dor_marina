@@ -61,7 +61,8 @@ export default {
     else{
       this.max = this.recipe.instructions.length;
     }
-    // this.value = this.localStorage.getItem(this.recipe.id);
+    console.log(localStorage.getItem(this.recipe.id));
+    this.value = localStorage.getItem(this.recipe.id);
   },
   methods:{
       async removeFromMeal(){
