@@ -5,13 +5,13 @@
         <h5 style="text-align: center; font-style: oblique; margin-top:15px; margin-left: 27%; margin-bottom:15px">{{error}}</h5>
         </b-row>
      <div class="container" v-dragula="colOne" bag="first-bag">
-        <div v-for="(r,index) in recipes" :key="r.id">
-          <div style="font-size:30px">{{index+1}}.</div>
-            <MealPreview class="recipePreview" :recipe="r" />
+        <div v-for="(r) in recipes" :key="r.id">
+            <MealPreview class="recipePreview" :recipe="r"/>
         </div>
       </div>
       <b-row v-if="!error">
          <b-button pill variant="danger" size="lg" @click="removeAll">Remove All</b-button>
+         <b-button @click="testModify">Update numbers</b-button>
       </b-row>
     </b-col>
   </b-container>
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       recipes: [],
-      error:null
+      error:null,
     };
   },
   // created: function () {
@@ -40,6 +40,8 @@ export default {
     this.$root.$on("mealRemoved",()=>{
       this.updateRecipes();
     })
+  },
+  computed:{
   },
   methods: {
     async updateRecipes() {
@@ -67,6 +69,9 @@ export default {
             const recipes = resp.data;
             for(let j=0; j<recipes.length; j++){
               if(recipes[j].id == id){
+                let inst = recipes[j].instructions;
+                let splits = inst.split("|");
+                recipes[j].instructions = splits;
                 recipesFromAns.push(recipes[j]);
               }
             }
@@ -74,6 +79,9 @@ export default {
             else{
             resp = await this.axios.get(
           `http://localhost:3000/recipe/recipeByID/${id}`);
+                let inst = resp.data[0]['instructions'];
+                let splits = inst.split("|");
+                resp.data[0]['instructions']= splits;
             recipesFromAns.push(resp.data[0]);
             }
         }
@@ -101,7 +109,11 @@ export default {
           console.log("error.response.status", error);
           return;
         }
-      }
+      },
+       testModify(){
+        console.log(this.recipes);
+        return this.recipes;
+        }
     },
 };
 </script>
@@ -110,7 +122,10 @@ export default {
 // .container {
 //   min-height: 200px;
 // }
-
+#index{
+  position:static;
+  font-size:30px;
+}
 .recipePreview:hover{
   cursor: -webkit-grab; 
   cursor: grab;

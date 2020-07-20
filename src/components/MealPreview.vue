@@ -2,6 +2,7 @@
     <b-container>
       <b-row>
         <b-col class="recipe-body">
+        <span v-if="number">{{number}}</span>
         <img :src="recipe.image" class="recipe-image"/>
         </b-col>
         <b-col id="progressBar">
@@ -41,6 +42,10 @@ export default {
     recipe: {
       type: Object,
       required: true
+    },
+    number:{
+      type: Number,
+      required: false
     }
   },
   data(){
@@ -50,7 +55,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.recipe);
     if(this.recipe.analyzedInstructions !== undefined){
     this.max = this.recipe.analyzedInstructions.length;
     }
