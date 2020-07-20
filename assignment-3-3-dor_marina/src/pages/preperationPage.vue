@@ -164,14 +164,6 @@ export default {
         });
     }
   },
-  computed:{
-      allMarked: function(){
-        if(this.numberIngridiaintsMarked==this.recipe.ingredients.length){
-          return false;
-        }
-        return true;
-      }
-  },
   methods:{
       changeStage(){
         if( !this.$refs.steps.children[0].children[0].checked){
