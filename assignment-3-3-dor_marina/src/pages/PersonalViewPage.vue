@@ -18,7 +18,7 @@
                             <span v-if="r.glutenFree"><img class="veg" src="../assets/glutenFree.png"/></span>
                             <span v-if="r.vegetarian"><img class="veg" src="../assets/vegetarian.png"/></span>
                             <span v-if="r.vegan"><img class="veg" src="../assets/vegan.png"/></span>
-                            <div><b>servings: {{r.portions}}</b></div>
+                            <div><b>servings: {{r.servings}}</b></div>
                             <b-button id="prepare" pill size="lg" variant="dark" @click="prepareRecipe(r.id)" style="margin-top:2px; margin-right:20px">Prepare Recipe <span class="ec ec-fork-and-knife"></span></b-button>
                             <b-button id="meal" pill size="lg" variant="dark" v-if="$root.store.username" @click="addToMeal(r.id)" style="margin-top:2px">Add To Meal 👨‍🍳</b-button>
                         </div>

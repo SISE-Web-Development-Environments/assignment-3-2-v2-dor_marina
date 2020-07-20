@@ -61,8 +61,7 @@ export default {
     else{
       this.max = this.recipe.instructions.length;
     }
-    console.log(localStorage.getItem(this.recipe.id));
-    this.value = localStorage.getItem(this.recipe.id);
+    this.value = sessionStorage.getItem(this.recipe.id);
   },
   methods:{
       async removeFromMeal(){
@@ -174,6 +173,7 @@ figure:hover + span {
 .container{
 background-color: rgba(247, 245, 224, 0.418);
 border: groove;
-margin-bottom: 5px;
+margin-bottom: 0.7cm;
+height: 6.3cm;
 }
 </style>

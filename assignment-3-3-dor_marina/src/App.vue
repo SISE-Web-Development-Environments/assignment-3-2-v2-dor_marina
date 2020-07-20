@@ -13,7 +13,12 @@
           <router-link :to="{ name: 'login' }" tag="a" class="a">Login</router-link>
         </span>
         <span v-else>
-          <a class="a" style="color:white; font-weight: 300; font-size:20px; margin-top:8px;"><img style="height: 40px; width: auto;" src="./assets/cart.png"/> <b>{{$root.store.number}} recipes</b></a>
+          <a class="a" style="color:white; font-weight: 300; font-size:20px; margin-top:8px;">
+             <router-link :to="{ name: 'meal'}">
+            <img style="height: 40px; width: auto;" src="./assets/cart.png"/> 
+             </router-link>
+            <b>{{$root.store.number}} recipes</b>
+            </a>
           <b-dropdown id="dropdown-1"  class="m-md-2">
             <template v-slot:button-content>
                 {{$root.store.username}}

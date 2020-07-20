@@ -130,7 +130,8 @@ export default {
 .index{
   // position:fixed;
   font-size:30px;
-  margin-bottom: 130px;
+  height: 7cm;
+  // margin-bottom: 4.6cm;
   text-align: right;
   margin-left:50px;
 }

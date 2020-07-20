@@ -59,6 +59,7 @@ export default {
           },
           {withCredentials: true}
         );
+        this.recipe.favorite = true;
       } catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
