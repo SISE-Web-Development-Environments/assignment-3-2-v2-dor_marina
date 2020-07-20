@@ -153,7 +153,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
-      if(localStorage.getItem(this.recipe.id)>0){
+      if(sessionStorage.getItem(this.recipe.id)>0 && this.$root.store.username){
         this.markAllIngredients=true;
         this.$nextTick(function () {
           this.checkAndDisable();
@@ -167,12 +167,12 @@ export default {
   methods:{
       changeStage(){
         if( !this.$refs.steps.children[0].children[0].checked){
-            localStorage.setItem(this.recipe.id,0);
+            sessionStorage.setItem(this.recipe.id,0);
         }
         else{
           for(let i=0; i<this.recipe._instructions.length;i++){
             if( this.$refs.steps.children[i].children[0].checked){
-              localStorage.setItem(this.recipe.id,i+1);
+              sessionStorage.setItem(this.recipe.id,i+1);
             }
             else{
               break;
@@ -182,7 +182,7 @@ export default {
         this.checkAndDisable();
       },
       checkAndDisable(){
-        let stage=localStorage.getItem(this.recipe.id);
+        let stage=sessionStorage.getItem(this.recipe.id);
         for(let i=0; i<this.recipe._instructions.length;i++){
           if(i<stage){
             this.$refs.steps.children[i].children[0].disabled=false;
@@ -205,16 +205,16 @@ export default {
             temp.children[i].children[0].checked=true;
           }
           this.numberIngridiaintsMarked=this.recipe.ingredients.length;
-          localStorage.setItem(this.recipe.id,0);
+          sessionStorage.setItem(this.recipe.id,0);
           this.checkAndDisable();
         }
         else{
           for(let i=0; i<this.recipe.ingredients.length;i++){
             this.$refs.ingri.children[i].children[0].checked=false;
           }
-          localStorage.setItem(this.recipe.id,0);
+          sessionStorage.setItem(this.recipe.id,0);
           this.numberIngridiaintsMarked=0;
-          localStorage.setItem(this.recipe.id,0);
+          sessionStorage.setItem(this.recipe.id,0);
           this.checkAndDisable();
           this.$refs.steps.children[0].children[0].disabled=true;
         }
@@ -226,13 +226,13 @@ export default {
         else{
           this.markAllIngredients=false;
           this.numberIngridiaintsMarked--;
-          localStorage.setItem(this.recipe.id,0);
+          sessionStorage.setItem(this.recipe.id,0);
           this.checkAndDisable();
           this.$refs.steps.children[0].children[0].disabled=true;
         }
         if(this.numberIngridiaintsMarked==this.recipe.ingredients.length){
           this.markAllIngredients=true;
-          localStorage.setItem(this.recipe.id,0);
+          sessionStorage.setItem(this.recipe.id,0);
           this.checkAndDisable();
         }
       },

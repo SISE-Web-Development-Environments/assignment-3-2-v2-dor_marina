@@ -77,30 +77,30 @@ import { BProgressBar } from 'bootstrap-vue'
 Vue.component('b-progress-bar', BProgressBar)
 
 const shared_data = {
-  username: localStorage.username,
-  number: localStorage.number,
-  recipeStages:localStorage.recipeStages,
+  username: sessionStorage.username,
+  number: sessionStorage.number,
+  recipeStages:sessionStorage.recipeStages,
   AddToMeal(recipeId){
-    localStorage.setItem(recipeId,0);
+    sessionStorage.setItem(recipeId,0);
   },
   newStage(recipeId){
-    localStorage.setItem(recipeId,localStorage.recipeId+1);
+    sessionStorage.setItem(recipeId,sessionStorage.recipeId+1);
   },
   setNum(number) {
-    localStorage.setItem("number", number);
+    sessionStorage.setItem("number", number);
     this.number = number;
   },
-  lastSearch:localStorage.lastSearch,
+  lastSearch:sessionStorage.lastSearch,
   saveSearch(search){
-    localStorage.setItem("lastSearch", search);
+    sessionStorage.setItem("lastSearch", search);
     this.lastSearch = search;
   },
   login(username) {
-    localStorage.setItem("username", username);
+    sessionStorage.setItem("username", username);
     this.username = username;
   },
   logout() {
-    localStorage.clear();
+    sessionStorage.clear();
     this.username = undefined;
     this.lastSearch = undefined;
   },
